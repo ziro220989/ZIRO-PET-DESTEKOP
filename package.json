@@ -1,0 +1,61 @@
+{
+  "name": "ziro-pet-desktop",
+  "productName": "ZIRO PET DESTEKOP",
+  "version": "1.0.0",
+  "description": "Mascota virtual de escritorio con IA, comandos de voz y personalización",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "build:installer": "electron-builder --win nsis",
+    "build:portable": "electron-builder --win portable"
+  },
+  "keywords": [
+    "desktop-pet",
+    "virtual-pet",
+    "ai-assistant",
+    "voice-assistant",
+    "cyberpunk"
+  ],
+  "author": "ZIRO PET",
+  "license": "MIT",
+  "build": {
+    "appId": "com.ziro.petdesktop",
+    "productName": "ZIRO PET DESTEKOP",
+    "asar": true,
+    "asarUnpack": [
+      "src/services/*.py"
+    ],
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "src/assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ZIRO PET DESTEKOP",
+      "artifactName": "ZIRO PET DESTEKOP v1.0 Setup.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.2.3",
+    "electron-builder": "^26.7.1"
+  },
+  "dependencies": {
+    "three": "^0.187.0"
+  }
+}

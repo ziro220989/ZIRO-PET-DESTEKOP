@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZIRO PET DESTEKOP</title>
+  <link rel="stylesheet" href="pet.css">
+</head>
+<body>
+  <div class="pet-container" id="petContainer">
+    <!-- Draggable Header Bar -->
+    <header class="drag-header">
+      <div class="header-left">
+        <span class="status-dot" id="statusDot" title="Estado de la Mascota"></span>
+        <span class="pet-name-tag" id="petNameTag">ZIRO</span>
+        <button class="livekit-pill active" id="btnLiveCallToggle" title="Llamada en Vivo LiveKit (Manos Libres: Di 'Activar Ziro')">📞 LIVE</button>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btnDiagnostics" title="Panel de Diagnóstico de Latencia de Voz (Fase 1)">⏱️</button>
+        <button class="icon-btn" id="btnInteract" title="Acariciar Mascota">✨</button>
+        <button class="icon-btn" id="btnToggleChat" title="Alternar Barra de Chat">💬</button>
+        <button class="icon-btn" id="btnSettings" title="Configuración / ZIRO Panel">⚙️</button>
+        <button class="icon-btn" id="btnMinimize" title="Minimizar">─</button>
+      </div>
+    </header>
+
+    <!-- FASE 1: Real-Time Voice Latency Diagnostics Panel (7 Metrics) -->
+    <div class="voice-diag-panel" id="voiceDiagPanel" style="display:none;">
+      <div class="diag-title-row">
+        <span>⚡ DIAGNÓSTICO DE CONVERSACIÓN NATURAL</span>
+        <span id="diagEngineBadge" class="diag-badge">STREAMING AR</span>
+      </div>
+      <div class="diag-grid">
+        <div class="diag-item"><span>1. Fin de voz (VAD):</span><strong id="diagVadMs">-- ms</strong></div>
+        <div class="diag-item"><span>2. Transcripción STT:</span><strong id="diagSttMs">-- ms</strong></div>
+        <div class="diag-item"><span>3. Procesamiento LLM:</span><strong id="diagLlmMs">-- ms</strong></div>
+        <div class="diag-item"><span>4. 1er Frag. Texto:</span><strong id="diagFirstTextMs">-- ms</strong></div>
+        <div class="diag-item"><span>5. Síntesis TTS (1°):</span><strong id="diagTtsMs">-- ms</strong></div>
+        <div class="diag-item highlight"><span>6. 1er Sonido Reprod.:</span><strong id="diagFirstAudioMs">-- ms</strong></div>
+        <div class="diag-item total"><span>7. Tiempo Total Resp.:</span><strong id="diagTotalMs">-- ms</strong></div>
+      </div>
+    </div>
+
+    <!-- Floating Cyber Dialogue Bubble -->
+    <div class="speech-bubble" id="speechBubble">
+      <div class="bubble-header">
+        <span class="bubble-sender" id="bubbleSender">ZIRO</span>
+        <span class="bubble-badge" id="bubbleBadge">IA ACTIVA</span>
+      </div>
+
+      <!-- Live Voice Recording HUD (Displays text & live mic meter on screen) -->
+      <div class="live-voice-hud" id="liveVoiceHud" style="display:none;">
+        <div class="live-meter-row">
+          <span class="live-mic-icon">🎙️</span>
+          <div class="live-meter-track">
+            <div class="live-meter-fill" id="liveMeterFill"></div>
+          </div>
+          <span class="live-meter-val" id="liveMeterVal">0%</span>
+        </div>
+        <div class="live-voice-text" id="liveVoiceText">Escuchando... Di tu comando</div>
+      </div>
+
+      <div class="bubble-content" id="bubbleText">
+        ¡Hola! Soy tu mascota virtual. Háblame por micrófono o escríbeme. Pídeme "abrime youtube" o lo que necesites.
+      </div>
+
+      <!-- Waveform equalizer when pet is speaking or listening -->
+      <div class="waveform-container" id="waveform">
+        <span class="wave-bar"></span>
+        <span class="wave-bar"></span>
+        <span class="wave-bar"></span>
+        <span class="wave-bar"></span>
+        <span class="wave-bar"></span>
+      </div>
+    </div>
+
+    <!-- Pet Character Stage -->
+    <main class="pet-stage" id="petStage">
+      <!-- Minimal Mode Floating Restore Button (Discreet, visible on hover) -->
+      <button class="minimal-restore-btn" id="btnMinimalRestore" title="Restaurar Menú Completo (o di 'Ziro maximizate')">⛶</button>
+
+      <div class="pet-glow-aura" id="petGlowAura"></div>
+
+      <!-- 3D Model Character Canvas with Automatic Procedural Animations -->
+      <canvas id="pet3dCanvas" class="pet-3d-canvas" width="320" height="300" title="¡Haz clic para ver el salto 3D!"></canvas>
+
+      <div class="pet-character" id="petCharacter" style="display:none;" title="¡Haz clic para interactuar!">
+        <img id="petImage" src="../assets/default_pets/ziro.svg" alt="Mascota Virtual" />
+      </div>
+
+      <div class="particles-container" id="particlesContainer"></div>
+    </main>
+
+    <!-- Interactive Floating Bottom Bar -->
+    <footer class="pet-controls" id="petControls">
+      <!-- Voice Mic Button -->
+      <button class="mic-btn" id="micBtn" title="Hablar por micrófono (Clic para hablar)">
+        <svg class="mic-icon" viewBox="0 0 24 24" width="22" height="22">
+          <path fill="currentColor" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+          <path fill="currentColor" d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+        </svg>
+        <span class="mic-pulse-ring"></span>
+      </button>
+
+      <!-- Text Chat Bar -->
+      <div class="chat-input-wrapper" id="chatInputWrapper">
+        <input 
+          type="text" 
+          id="chatInput" 
+          class="chat-input" 
+          placeholder="Escribe a Ziro o pide 'abrime youtube'..." 
+          autocomplete="off"
+        />
+        <button id="sendBtn" class="send-btn" title="Enviar Mensaje">
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="pet.js"></script>
+</body>
+</html>

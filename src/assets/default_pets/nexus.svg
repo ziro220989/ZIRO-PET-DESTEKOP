@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <filter id="nexus-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient id="dragon-body" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#143022" />
+      <stop offset="100%" stop-color="#09130f" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    @keyframes nexusHover {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-10px) scale(1.02); }
+    }
+    @keyframes wingFlapL {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-16deg); }
+    }
+    @keyframes wingFlapR {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(16deg); }
+    }
+    @keyframes corePulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.25); opacity: 1; filter: drop-shadow(0 0 10px #00ff66); }
+    }
+    .nexus-group { animation: nexusHover 3s ease-in-out infinite; }
+    .wing-l { animation: wingFlapL 1.6s ease-in-out infinite; transform-origin: 70px 105px; }
+    .wing-r { animation: wingFlapR 1.6s ease-in-out infinite; transform-origin: 130px 105px; }
+    .core { animation: corePulse 1.8s ease-in-out infinite; transform-origin: 100px 135px; }
+  </style>
+
+  <g class="nexus-group">
+    <!-- Holographic Energy Wings -->
+    <g class="wing-l">
+      <path d="M 70 105 L 15 65 Q 40 100 20 125 L 70 115 Z" fill="#00ff66" fill-opacity="0.25" stroke="#00ff66" stroke-width="2" filter="url(#nexus-glow)" />
+      <line x1="70" y1="105" x2="25" y2="75" stroke="#00ffff" stroke-width="1.5" />
+      <line x1="55" y1="110" x2="30" y2="115" stroke="#00ffff" stroke-width="1.5" />
+    </g>
+
+    <g class="wing-r">
+      <path d="M 130 105 L 185 65 Q 160 100 180 125 L 130 115 Z" fill="#00ff66" fill-opacity="0.25" stroke="#00ff66" stroke-width="2" filter="url(#nexus-glow)" />
+      <line x1="130" y1="105" x2="175" y2="75" stroke="#00ffff" stroke-width="1.5" />
+      <line x1="145" y1="110" x2="170" y2="115" stroke="#00ffff" stroke-width="1.5" />
+    </g>
+
+    <!-- Dragon Horns -->
+    <path d="M 80 65 L 55 30 Q 75 45 88 58 Z" fill="#09140f" stroke="#00ff66" stroke-width="2" filter="url(#nexus-glow)" />
+    <path d="M 120 65 L 145 30 Q 125 45 112 58 Z" fill="#09140f" stroke="#00ff66" stroke-width="2" filter="url(#nexus-glow)" />
+
+    <!-- Dragon Body -->
+    <path d="M 75 100 C 65 140 75 168 100 168 C 125 168 135 140 125 100 Z" fill="url(#dragon-body)" stroke="#1a3b2b" stroke-width="2" />
+
+    <!-- Dragon Head -->
+    <polygon points="100,50 135,78 122,110 78,110 65,78" fill="url(#dragon-body)" stroke="#00ff66" stroke-width="2" />
+
+    <!-- Dragon Visor / Slit Eyes -->
+    <path d="M 78 82 Q 90 77 96 85" stroke="#00ff66" stroke-width="3" fill="none" stroke-linecap="round" filter="url(#nexus-glow)" />
+    <path d="M 122 82 Q 110 77 104 85" stroke="#00ff66" stroke-width="3" fill="none" stroke-linecap="round" filter="url(#nexus-glow)" />
+    <circle cx="88" cy="83" r="2.5" fill="#ffffff" />
+    <circle cx="112" cy="83" r="2.5" fill="#ffffff" />
+
+    <!-- Chest Plasma Core -->
+    <circle class="core" cx="100" cy="135" r="9" fill="#00ff66" filter="url(#nexus-glow)" />
+    <circle cx="100" cy="135" r="4" fill="#ffffff" />
+
+    <!-- Cute little claws -->
+    <ellipse cx="86" cy="160" rx="8" ry="5" fill="#0e1f17" stroke="#00ff66" stroke-width="1.5" />
+    <ellipse cx="114" cy="160" rx="8" ry="5" fill="#0e1f17" stroke="#00ff66" stroke-width="1.5" />
+  </g>
+</svg>

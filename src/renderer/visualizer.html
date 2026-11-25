@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZIRO VISUALIZER - Visor de Imágenes ComfyUI</title>
+  <link rel="stylesheet" href="visualizer.css">
+</head>
+<body>
+  <div class="visualizer-container">
+    <!-- Top Cyberpunk Fluor Navigation Header -->
+    <header class="visualizer-header">
+      <div class="header-left">
+        <div class="logo-group">
+          <span class="cyber-icon">⚡</span>
+          <span class="logo-title">ZIRO <span class="highlight">VISUALIZER</span></span>
+        </div>
+        <div class="status-tags">
+          <span class="tag tag-fluor" id="comfyStatusTag">🎨 COMFYUI ACTIVO</span>
+          <span class="tag tag-cyan" id="micLiveTag">🎙️ VOZ EN VIVO LISTA</span>
+        </div>
+      </div>
+
+      <!-- Fluor Tabs -->
+      <nav class="fluor-tabs">
+        <button class="fluor-tab active" data-tab="tab-preview">🖼️ Vista Principal</button>
+        <button class="fluor-tab" data-tab="tab-cutout">✂️ Fondo Transparente</button>
+        <button class="fluor-tab" data-tab="tab-info">📊 Detalles</button>
+      </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="visualizer-main">
+      <!-- Image Display Viewport -->
+      <section class="viewport-card">
+        <div class="image-stage" id="imageStage">
+          <!-- Checkerboard background for transparent PNG inspection -->
+          <div class="checker-bg" id="checkerBg"></div>
+          
+          <img id="mainDisplayImg" src="../assets/default_pets/kitsune_anime.png" alt="Imagen Generada" class="display-image" />
+          
+          <!-- Loading state overlay -->
+          <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+            <div class="cyber-spinner"></div>
+            <p class="loading-text" id="loadingText">Procesando en Comfy Desktop...</p>
+          </div>
+        </div>
+
+        <!-- Image Toolbar -->
+        <div class="viewport-toolbar">
+          <div class="zoom-controls">
+            <button class="icon-tool" id="btnZoomOut" title="Reducir">🔍-</button>
+            <span class="zoom-val" id="zoomVal">100%</span>
+            <button class="icon-tool" id="btnZoomIn" title="Aumentar">🔍+</button>
+            <button class="icon-tool" id="btnZoomFit" title="Ajustar">⛶</button>
+            <button class="icon-tool" id="btnToggleChecker" title="Alternar Fondo de Transparencia">🏁</button>
+          </div>
+
+          <div class="format-download-buttons">
+            <span class="download-label">DESCARGAR:</span>
+            <button class="btn-download" id="btnDlPng">PNG</button>
+            <button class="btn-download" id="btnDlJpg">JPG</button>
+            <button class="btn-download" id="btnDlWebp">WEBP</button>
+            <button class="btn-download btn-cutout" id="btnDlCutout">✨ PNG SIN FONDO</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Prompt & Live Hands-Free Voice Control Dock -->
+      <footer class="prompt-dock">
+        <!-- Live Voice Speech Indicator Bar (Hands-free active continuous) -->
+        <div class="live-mic-banner">
+          <div class="mic-status-row">
+            <div class="mic-dot pulse" id="micLiveDot"></div>
+            <span class="mic-banner-text" id="micBannerText">🎙️ <strong>Micrófono en vivo activo (Manos Libres):</strong> Habla cuando quieras sin apretar ningún botón ("agrega cabello dorado", "hazlo más realista", "más destellos"). Se transcribirá y ejecutará automáticamente.</span>
+          </div>
+
+          <div class="waveform-meter" id="waveMeter">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+
+        <!-- Prompt Text & Action Row -->
+        <div class="prompt-input-row">
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="visualizerPromptInput" 
+              class="prompt-input" 
+              placeholder="Escribe aquí tu prompt o simplemente háblale a Ziro con tu voz..." 
+              value="anime warrior kitsune girl, green neon aura, glowing energy rings, 8k resolution, cinematic lighting"
+            />
+            <button class="clear-input-btn" id="btnClearPrompt" title="Limpiar">✕</button>
+          </div>
+          <button class="btn-action-generate" id="btnGenerate">
+            <span>⚡ Generar Cambios</span>
+          </button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="visualizer.js"></script>
+</body>
+</html>

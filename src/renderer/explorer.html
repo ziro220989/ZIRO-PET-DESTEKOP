@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explorador - Ziro</title>
+  <link rel="stylesheet" href="explorer.css">
+</head>
+<body>
+  <!-- Cyberpunk Outer Mecha Window Frame with Laser Perimeter Border -->
+  <div class="cyber-window-container" id="cyberWindowContainer">
+    <!-- Animated Light Trail Laser Canvas around window perimeter -->
+    <canvas id="laserBorderCanvas" class="laser-border-canvas"></canvas>
+
+    <!-- Top Mecha Armor Header / Bar -->
+    <header class="mecha-header" id="mechaHeader">
+      <!-- Top Cyber Notches and Corner Flares -->
+      <div class="corner-glow top-left"></div>
+      <div class="corner-glow top-right"></div>
+
+      <div class="header-left">
+        <div class="ziro-brand-badge">
+          <span class="z-glyph">Z</span>
+        </div>
+        <div class="header-title-group">
+          <span class="header-title">Explorador - Ziro</span>
+          <div class="cyber-chevrons">
+            <span class="chev">»</span><span class="chev">»</span><span class="chev">»</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Window Control Action Buttons -->
+      <div class="window-actions">
+        <button class="win-btn" id="btnWinMinimize" title="Minimizar">─</button>
+        <button class="win-btn" id="btnWinMaximize" title="Maximizar / Restaurar">□</button>
+        <button class="win-btn win-close" id="btnWinClose" title="Cerrar">✕</button>
+      </div>
+    </header>
+
+    <!-- Navigation Bar: Back, Forward, Up, Breadcrumbs / Path & Search -->
+    <nav class="cyber-navbar">
+      <div class="nav-arrows">
+        <button class="nav-btn" id="btnNavBack" title="Atrás" disabled>←</button>
+        <button class="nav-btn" id="btnNavForward" title="Adelante" disabled>→</button>
+        <button class="nav-btn" id="btnNavUp" title="Subir un nivel">↑</button>
+      </div>
+
+      <div class="breadcrumb-bar" id="breadcrumbBar">
+        <span class="breadcrumb-icon">💻</span>
+        <div class="breadcrumb-segments" id="breadcrumbSegments">
+          <span class="bc-seg" data-path="ROOT">Este equipo</span>
+          <span class="bc-sep">›</span>
+          <span class="bc-seg" data-path="D:\">SSD (D:)</span>
+        </div>
+        <button class="nav-refresh-btn" id="btnRefreshPath" title="Actualizar">↻</button>
+      </div>
+
+      <div class="cyber-search-box">
+        <input type="text" id="inputSearchFiles" class="search-input" placeholder="Buscar en carpeta actual..." />
+        <span class="search-icon">🔍</span>
+      </div>
+    </nav>
+
+    <!-- Cyber Action Ribbon (Nuevo, Cortar, Copiar, Pegar, Eliminar, Ordenar, Ver) -->
+    <div class="cyber-ribbon">
+      <div class="ribbon-group">
+        <button class="ribbon-btn" id="btnNewFolder">
+          <span class="r-icon">⊕</span>
+          <span>Nuevo</span>
+          <span class="r-arrow">▾</span>
+        </button>
+        <button class="ribbon-icon-btn" id="btnCut" title="Cortar">✂</button>
+        <button class="ribbon-icon-btn" id="btnCopy" title="Copiar">⎘</button>
+        <button class="ribbon-icon-btn" id="btnPaste" title="Pegar">📋</button>
+        <button class="ribbon-icon-btn" id="btnDelete" title="Eliminar">🗑</button>
+      </div>
+
+      <div class="ribbon-sep"></div>
+
+      <div class="ribbon-group">
+        <button class="ribbon-btn" id="btnSort">
+          <span class="r-icon">⇅</span>
+          <span>Ordenar</span>
+          <span class="r-arrow">▾</span>
+        </button>
+        <button class="ribbon-btn" id="btnViewMode">
+          <span class="r-icon">☷</span>
+          <span>Ver</span>
+          <span class="r-arrow">▾</span>
+        </button>
+      </div>
+
+      <div class="ribbon-status" id="radarStatus">
+        <span class="status-pulse-dot"></span>
+        <span class="status-label">ESCANEO CUÁNTICO ACTIVO</span>
+      </div>
+    </div>
+
+    <!-- Main Workspace Area: Sidebar Tree + Glowing Grid Files Canvas -->
+    <div class="explorer-body">
+      <!-- Left Glass Sidebar: Quick Access & Drives -->
+      <aside class="cyber-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-item active" data-path="HOME">
+            <span class="sb-icon">🏠</span>
+            <span class="sb-label">Inicio</span>
+          </div>
+          <div class="sidebar-item" data-path="DESKTOP">
+            <span class="sb-icon">🖥️</span>
+            <span class="sb-label">Escritorio</span>
+          </div>
+          <div class="sidebar-item" data-path="DOWNLOADS">
+            <span class="sb-icon">📥</span>
+            <span class="sb-label">Descargas</span>
+          </div>
+          <div class="sidebar-item" data-path="DOCUMENTS">
+            <span class="sb-icon">📄</span>
+            <span class="sb-label">Documentos</span>
+          </div>
+          <div class="sidebar-item" data-path="PICTURES">
+            <span class="sb-icon">🖼️</span>
+            <span class="sb-label">Imágenes</span>
+          </div>
+          <div class="sidebar-item" data-path="MUSIC">
+            <span class="sb-icon">🎵</span>
+            <span class="sb-label">Música</span>
+          </div>
+          <div class="sidebar-item" data-path="VIDEOS">
+            <span class="sb-icon">🎬</span>
+            <span class="sb-label">Vídeos</span>
+          </div>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-heading">
+            <span class="sh-arrow">▾</span>
+            <span class="sh-icon">💻</span>
+            <span>Este equipo</span>
+          </div>
+          <div class="sidebar-drives-list" id="sidebarDrivesList">
+            <!-- Dynamic Drives loaded via JS -->
+            <div class="sidebar-item" data-path="C:\">
+              <span class="sb-icon">💾</span>
+              <span class="sb-label">Disco local (C:)</span>
+            </div>
+            <div class="sidebar-item active-drive" data-path="D:\">
+              <span class="sb-icon">💽</span>
+              <span class="sb-label">SSD (D:)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-heading">
+            <span class="sh-arrow">▾</span>
+            <span class="sh-icon">🌐</span>
+            <span>Red & Motores</span>
+          </div>
+          <div class="sidebar-item" data-path="UNREAL">
+            <span class="sb-icon">🎮</span>
+            <span class="sb-label">Unreal Projects</span>
+          </div>
+          <div class="sidebar-item" data-path="COMFY">
+            <span class="sb-icon">🎨</span>
+            <span class="sb-label">ComfyUI Models</span>
+          </div>
+        </div>
+
+        <!-- Mini Holographic Radar Widget in Sidebar Footer -->
+        <div class="sidebar-radar-box">
+          <canvas id="miniRadarCanvas" width="180" height="70"></canvas>
+          <div class="radar-readout">SISTEMA ZIRO OK</div>
+        </div>
+      </aside>
+
+      <!-- Right Main View: Holographic Grid of Folders and Files -->
+      <main class="cyber-fileview" id="fileviewArea">
+        <!-- Floating Scan Line Beam -->
+        <div class="cyber-scanline" id="scanlineBeam"></div>
+
+        <!-- Loading HUD Overlay -->
+        <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+          <div class="circular-scan-loader">
+            <div class="scan-ring outer"></div>
+            <div class="scan-ring middle"></div>
+            <div class="scan-ring inner"></div>
+            <span class="loader-glyph">Z</span>
+          </div>
+          <span class="loading-text">ESCANEANDO DIRECTORIO...</span>
+        </div>
+
+        <!-- Files Grid View Container -->
+        <div class="files-grid" id="filesGrid">
+          <!-- Dynamically populated files and folders -->
+        </div>
+
+        <!-- Empty Directory Message -->
+        <div class="empty-folder-box" id="emptyFolderBox" style="display: none;">
+          <div class="empty-glyph">📂</div>
+          <div class="empty-title">Esta carpeta está vacía</div>
+          <div class="empty-subtitle">No se detectaron elementos en este sector</div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Bottom Status Bar -->
+    <footer class="cyber-footer">
+      <div class="footer-left">
+        <span id="footerItemCount">0 elementos</span>
+        <span class="footer-sep">|</span>
+        <span id="footerSelectionInfo">Ningún elemento seleccionado</span>
+      </div>
+      <div class="footer-center">
+        <div class="cyber-arrows-left">
+          <span>«</span><span>«</span><span>«</span><span>«</span><span>«</span>
+        </div>
+      </div>
+      <div class="footer-right">
+        <span class="cyber-os-tag">ZIRO OS // ARCHITECTURE 5.8 READY</span>
+        <div class="view-mode-toggles">
+          <button class="view-btn active" id="btnViewGrid" title="Cuadrícula con Íconos Grandes">☷</button>
+          <button class="view-btn" id="btnViewList" title="Lista Detallada">☰</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bottom Corner Armor Flare Decorations -->
+    <div class="corner-glow bottom-left"></div>
+    <div class="corner-glow bottom-right"></div>
+  </div>
+
+  <script src="explorer.js"></script>
+</body>
+</html>

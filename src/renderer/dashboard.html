@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZIRO PET DESTEKOP - Panel de Control</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="holo-scanlines" id="holoScanlines"></div>
+  <div class="dashboard-layout">
+    <!-- Sidebar Navigation (13 Secciones Futuristas) -->
+    <aside class="sidebar">
+      <div class="app-brand">
+        <div class="sidebar-mascot-ring" id="sidebarMascotBadge" title="Mascota Original Integrada">
+          <img id="sidebarMascotImg" src="../assets/default_pets/ziro_piggy.png" alt="Ziro Pet" />
+        </div>
+        <div class="brand-text">
+          <h1>ZIRO AI PET</h1>
+          <span>VOICE • UE5 • STUDIO</span>
+        </div>
+      </div>
+
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="tab-home">
+          <span class="tab-icon">🏠</span>
+          <span>1. Inicio</span>
+        </button>
+        <button class="nav-tab" data-tab="tab-pets">
+          <span class="tab-icon">🐾</span>
+          <span>2. Mascotas y compañía</span>
+        </button>
+        <button class="nav-tab" data-tab="tab-voice">
+          <span class="tab-icon">🎙️</span>
+          <span>3. Dispositivos y voz</span>
+        </button>
+        <button class="nav-tab" data-tab="tab-ai">
+          <span class="tab-icon">🧠</span>
+          <span>4. Conexión de IA</span>
+        </button>
+        <button class="nav-tab" data-tab="tab-commands">
+          <span class="tab-icon">⚡</span>
+          <span>5. Comandos por voz</span>
+        </button>
+        <button class="nav-tab module-highlight" data-tab="tab-scanner" data-standalone-module="scanner">
+          <span class="tab-icon">🛰️</span>
+          <span>10. ZIRO SYSTEM SCANNER</span>
+          <span class="nav-popout" data-popout="scanner" title="Abrir en nueva ventana aparte del plugin">🗗</span>
+        </button>
+        <button class="nav-tab" data-tab="tab-appearance">
+          <span class="tab-icon">🎨</span>
+          <span>11. Apariencia</span>
+        </button>
+        <button class="nav-tab" data-tab="tab-distribution">
+          <span class="tab-icon">📦</span>
+          <span>12. EXE y distribución</span>
+        </button>
+        <button class="nav-tab" data-tab="tab-settings">
+          <span class="tab-icon">⚙️</span>
+          <span>13. Ajustes</span>
+        </button>
+        <button class="nav-tab module-highlight" data-tab="tab-gaming" data-standalone-module="gaming">
+          <span class="tab-icon">🎯</span>
+          <span>14. ZIRO GAMING VOICE CONTROL</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="text-align:center; padding:6px 0; border:1px solid var(--ziro-border); border-radius:8px; background:rgba(0,0,0,0.4);">
+            <div style="font-size:18px; font-weight:900; letter-spacing:2px; color:var(--ziro-primary); text-shadow:0 0 10px var(--ziro-glow);">Z</div>
+            <div style="font-size:10px; font-weight:700; color:#d8e8ff; letter-spacing:1px;">ZIRO STUDIO v4.0</div>
+          </div>
+          <div class="status-indicator">
+            <span class="live-dot"></span>
+            <span id="currentPetSummary">Mascota: Ziro</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+      <!-- Futuristic Panoramic Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" class="hud-back-home" id="btnBackHome" title="Volver a Inicio">🏠 Inicio</button>
+          <div class="topbar-title" id="pageTitle">Inicio — Centro de Comando ZIRO AI PET</div>
+          <div class="hud-waveform" title="LiveKit Voz Activa">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <label class="standalone-switch-pill" title="Abrir módulos avanzados en nueva ventana aparte del plugin ya instalado">
+            <input type="checkbox" id="chkDetachModulesDefault" checked />
+            <span>🗗 Abrir en Ventana Aparte</span>
+          </label>
+        </div>
+
+        <div class="topbar-actions" style="display: flex; align-items: center; gap: 8px;">
+          <div class="hud-project-pill" id="hudProjectPill" title="Proyecto Unreal de Destino (clic para administrar)">
+            <span>🎯 Proyecto de destino:</span>
+            <strong id="hudProjectName" style="color: var(--ziro-primary);">Sin seleccionar</strong>
+            <span class="proj-path" id="hudProjectPath"></span>
+          </div>
+          <button class="btn btn-fluor" id="btnPopoutActiveModule" style="background: rgba(0, 240, 255, 0.14); border: 1px solid var(--ziro-secondary); color: var(--ziro-secondary); font-weight: 700; cursor: pointer;" title="Abrir el módulo actual en su propia ventana independiente">
+            🗗 Ventana Aparte
+          </button>
+          <button class="btn btn-fluor" id="btnOpenVisualizerTop" style="background: rgba(0, 255, 68, 0.15); border: 1px solid var(--ziro-primary); color: var(--ziro-primary); font-weight: 700; cursor: pointer;">
+            ⚡ VISUALIZER
+          </button>
+          <button class="btn btn-fluor" id="btnOpenExplorerTop" style="background: rgba(0, 255, 68, 0.2); border: 1px solid var(--ziro-primary); color: var(--ziro-primary); font-weight: 700; cursor: pointer;">
+            📂 EXPLORADOR
+          </button>
+          <button class="btn btn-primary" id="btnSaveAll">Guardar Cambios</button>
+          <div class="win-ctrl-group">
+            <button type="button" class="win-ctrl-btn" id="btnWinMin" title="Minimizar">─</button>
+            <button type="button" class="win-ctrl-btn" id="btnWinMax" title="Maximizar / Restaurar">☐</button>
+            <button type="button" class="win-ctrl-btn win-ctrl-close" id="btnWinClose" title="Cerrar">✕</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Barra superior exclusiva Imagen 2 cuando ZIRO PROCEDURAL FRAMEWORK abre en ventana aparte -->
+      <header class="pf-standalone-header" id="pfStandaloneHeader" style="display:none;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div>
+            <div style="font-size:18px; font-weight:900; letter-spacing:1.5px; color:var(--ziro-primary); text-shadow:0 0 12px var(--ziro-glow);">ZIRO VOICE</div>
+            <div style="font-size:10px; color:#b8d7c8; letter-spacing:1.4px;">ASISTENTE IA PARA UNREAL</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; font-size:11.5px; color:#9eb9b0; padding-left:14px; border-left:1px solid var(--ziro-border);">
+            <strong style="color:#fff;">Unreal Engine 5.8</strong>
+            <span>Archivo</span><span>Editar</span><span>Ventana</span><span>Herramientas</span><strong style="color:var(--ziro-primary);">ZIRO</strong><span>Ayuda</span>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button type="button" class="btn btn-secondary" id="btnPfNavHome" style="font-size:11px; padding:5px 10px;">🏠 Inicio ZIRO</button>
+          <button type="button" class="btn btn-secondary" id="btnPfNavFinisher" style="font-size:11px; padding:5px 10px;">⚔️ Finisher Studio</button>
+          <button type="button" class="btn btn-secondary" id="btnPfNavFusion" style="font-size:11px; padding:5px 10px;">🧬 Character Fusion</button>
+          <span class="badge" style="background:rgba(0,255,68,0.18); border:1px solid var(--ziro-primary); color:var(--ziro-primary); font-size:11px; padding:6px 12px; font-weight:900;">Z ZIRO PLUGIN</span>
+          <div class="win-ctrl-group">
+            <button type="button" class="win-ctrl-btn" id="btnPfWinMin" title="Minimizar">─</button>
+            <button type="button" class="win-ctrl-btn" id="btnPfWinMax" title="Maximizar / Restaurar">☐</button>
+            <button type="button" class="win-ctrl-btn win-ctrl-close" id="btnPfWinClose" title="Cerrar">✕</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="tab-contents">
+        <!-- ==========================================
+             TAB 0: INICIO (IDENTIDAD MASCOTA + LANZADOR)
+             ========================================== -->
+        <section class="tab-pane active" id="tab-home">
+          <div class="home-hero-grid">
+            <!-- Mascota Original Integrada -->
+            <div class="home-mascot-stage">
+              <div style="display:flex; width:100%; justify-content:space-between; align-items:center;">
+                <span class="badge" style="font-size:10px;">ZIRO ASISTENTE v4.0</span>
+                <span style="font-size:11px; color: var(--ziro-indicator); font-weight:700;">● LIVEKIT ACTIVO</span>
+              </div>
+              <div class="mascot-orbital-wrapper" id="homeMascotStage">
+                <div class="mascot-orbital-ring"></div>
+                <div class="mascot-orbital-ring ring-2"></div>
+                <img id="homeMascotImg" src="../assets/default_pets/ziro_piggy.png" alt="Mascota Original Ziro" />
+              </div>
+              <div id="homeMascotSpeech" style="font-size: 12.5px; color: #e2f5ec; background: rgba(0,0,0,0.45); border: 1px solid var(--ziro-border); border-radius: 10px; padding: 10px; width: 100%; margin-bottom: 10px;">
+                "¡Hola! Soy tu mascota Ziro. Podés abrir procesos, diseñar ciudades en Unreal, fusionar personajes o editar Finishers."
+              </div>
+              <div style="display:flex; gap: 6px; width: 100%;">
+                <input type="text" id="homeQuickPromptInput" class="form-control" placeholder="Escribí o hablá con Ziro..." style="flex:1; font-size:12px;" />
+                <button type="button" class="btn btn-primary" id="btnHomeSendPrompt" style="padding: 6px 12px;">▶</button>
+              </div>
+            </div>
+
+            <!-- Estado del Ecosistema y Acceso Directo a Módulos -->
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div class="card neon-card" style="margin-bottom:0;">
+                <div class="card-header">
+                  <h2>🚀 Plataforma Futurista ZIRO AI PET + Unreal Engine 5.8</h2>
+                  <span class="badge" id="homeTargetProjectBadge">PROYECTO ACTIVO</span>
+                </div>
+                <p style="font-size:12.5px; color: var(--color-text-muted); margin-top:4px;">
+                  Proyecto de destino actual: <strong id="homeProjectPathText" style="color: var(--ziro-primary);">Ninguno seleccionado (no se usará ZIRO HOST automáticamente)</strong>
+                </p>
+                <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+                  <button type="button" class="btn btn-secondary" id="btnHomePickProject">📂 Elegir Proyecto .uproject</button>
+                  <button type="button" class="btn btn-secondary" id="btnHomeScanSystem">🛰️ Escanear Discos (C:, D:, E:, F:)</button>
+                  <button type="button" class="btn btn-secondary" id="btnHomeOpenAppearance">🎨 Personalizar Colores</button>
+                </div>
+              </div>
+
+              <div class="home-modules-grid">
+                <button type="button" class="home-module-tile" data-jump-tab="tab-procedural">
+                  <div style="font-size:20px;">🏙️</div>
+                  <div style="font-weight:800; color:var(--ziro-primary); margin-top:4px;">ZIRO PROCEDURAL FRAMEWORK</div>
+                  <div style="font-size:11.5px; color:var(--color-text-muted); margin-top:4px;">Ciudades, edificios modulares con puertas funcionales, naturaleza, abandono y PCG.</div>
+                </button>
+                <button type="button" class="home-module-tile" data-jump-tab="tab-fusion">
+                  <div style="font-size:20px;">🧬</div>
+                  <div style="font-weight:800; color:var(--ziro-secondary); margin-top:4px;">ZIRO CHARACTER FUSION</div>
+                  <div style="font-size:11.5px; color:var(--color-text-muted); margin-top:4px;">Combina habilidades de personajes y packs Fab con IK Rig / Retargeter.</div>
+                </button>
+                <button type="button" class="home-module-tile" data-jump-tab="tab-finisher">
+                  <div style="font-size:20px;">⚔️</div>
+                  <div style="font-weight:800; color:#ff66ee; margin-top:4px;">ZIRO FINISHER STUDIO</div>
+                  <div style="font-size:11.5px; color:var(--color-text-muted); margin-top:4px;">Multi-Target (hasta 10 enemigos), Shuffle Bag (tecla Ñ), Preview 3D y AI Anim Editor.</div>
+                </button>
+                <button type="button" class="home-module-tile" data-jump-tab="tab-scanner">
+                  <div style="font-size:20px;">🛰️</div>
+                  <div style="font-weight:800; color:#ffaa33; margin-top:4px;">ZIRO SYSTEM SCANNER</div>
+                  <div style="font-size:11.5px; color:var(--color-text-muted); margin-top:4px;">Audita Python, LM Studio, GGUF, VS Code, Cline, ComfyUI, Ciro y UE 5.8 en todos los discos.</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 1: MASCOTAS & CREACIÓN
+             ========================================== -->
+        <section class="tab-pane" id="tab-pets">
+          <!-- User & Pet Names Identity Card -->
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>👤 Identidad & Nombres</h2>
+              <span class="badge">LLAMADA PERSONALIZADA</span>
+            </div>
+            <p class="card-desc">
+              Configura cómo se llama tu mascota y cómo quieres que te llame a ti cuando te habla o te pide confirmación:
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-top: 10px;">
+              <div class="form-group">
+                <label for="inputPetName" style="display:block; margin-bottom: 6px; font-weight:600; color: #a3ffc7;">🏷️ Nombre de tu Mascota</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="inputPetName" class="form-control" placeholder="Escribe el nombre (ej. Ziro, Mochi)" />
+                  <button class="btn btn-secondary" id="btnUpdateName">Actualizar</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputUserName" style="display:block; margin-bottom: 6px; font-weight:600; color: #00ff44;">👤 Tu Nombre (cómo te llamará tu mascota)</label>
+                <input type="text" id="inputUserName" class="form-control" placeholder="Tu nombre o apodo (ej. Legolas)" />
+              </div>
+            </div>
+            <p style="margin-top: 10px; font-size: 13px; color: #8ee9b2;">
+              💬 <em>Tu mascota te llamará por tu nombre, te pedirá permisos cuando realice cambios importantes y te consultará: "¿Quieres hacer algún cambio o te parece bien lo que hice, [Tu Nombre]?"</em>
+            </p>
+          </div>
+
+          <!-- Default Pets Gallery -->
+          <div class="card">
+            <div class="card-header">
+              <h2>🐾 Mascotas Disponibles</h2>
+              <span class="badge">PREDEFINIDAS</span>
+            </div>
+            <div class="pets-grid" id="defaultPetsGrid">
+              <div class="pet-card" data-pet-id="ziro_piggy">
+                <div class="pet-thumb">
+                  <img src="../assets/default_pets/ziro_piggy.png" alt="Ziro Rosada Original" />
+                </div>
+                <h3>Ziro Original</h3>
+                <p>Mascota Rosada Clásica</p>
+                <span class="check-badge">✓ ACTIVO</span>
+              </div>
+
+              <div class="pet-card selected" data-pet-id="ziro">
+                <div class="pet-thumb">
+                  <img src="../assets/default_pets/ziro.svg" alt="Ziro" />
+                </div>
+                <h3>Ziro</h3>
+                <p>Gato Cibernético</p>
+                <span class="check-badge">✓ ACTIVO</span>
+              </div>
+
+              <div class="pet-card" data-pet-id="kitsune">
+                <div class="pet-thumb">
+                  <img src="../assets/default_pets/kitsune_anime.png" alt="Kitsune Anime" />
+                </div>
+                <h3>Kitsune</h3>
+                <p>Anime ComfyUI HD</p>
+                <span class="check-badge">✓ ACTIVO</span>
+              </div>
+
+              <div class="pet-card" data-pet-id="sparky">
+                <div class="pet-thumb">
+                  <img src="../assets/default_pets/sparky.svg" alt="Sparky" />
+                </div>
+                <h3>Sparky</h3>
+                <p>Perro Shiba Neón</p>
+                <span class="check-badge">✓ ACTIVO</span>
+              </div>
+
+              <div class="pet-card" data-pet-id="nexus">
+                <div class="pet-thumb">
+                  <img src="../assets/default_pets/nexus.svg" alt="Nexus" />
+                </div>
+                <h3>Nexus</h3>
+                <p>Dragón Mecha</p>
+                <span class="check-badge">✓ ACTIVO</span>
+              </div>
+
+              <div class="pet-card" data-pet-id="glitch">
+                <div class="pet-thumb">
+                  <img src="../assets/default_pets/glitch.svg" alt="Glitch" />
+                </div>
+                <h3>Glitch</h3>
+                <p>Slime Cyber Kawaii</p>
+                <span class="check-badge">✓ ACTIVO</span>
+              </div>
+
+              <div class="pet-card" data-pet-id="volt">
+                <div class="pet-thumb">
+                  <img src="../assets/default_pets/volt.svg" alt="Volt" />
+                </div>
+                <h3>Volt</h3>
+                <p>Halcón Drone</p>
+                <span class="check-badge">✓ ACTIVO</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comfy Desktop Live Integration Banner -->
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>🎨 Conexión Comfy Desktop (Motor Anime Z-Image-Turbo)</h2>
+              <span class="badge" id="comfyStatusBadge">VERIFICANDO...</span>
+            </div>
+            <p class="card-desc">Conectado a tu programa <strong>Comfy Desktop</strong> local (<code>127.0.0.1:8188</code>) con tu GPU RTX para generar personajes de anime de alto nivel (1024x1024) y recortar el fondo automáticamente en 3D.</p>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:10px;">
+              <button type="button" class="btn btn-neon" id="btnOpenComfyDesktop" style="width:auto; padding:8px 16px;">🖥️ Abrir Comfy Desktop en mi Pantalla</button>
+              <button type="button" class="btn btn-secondary" id="btnCheckComfyStatus">🔄 Verificar Conexión ComfyUI</button>
+              <span id="comfyStatusDetail" style="font-size:12px; color:#00ff44; font-family:monospace;">Detectando servidor local ComfyUI...</span>
+            </div>
+          </div>
+
+          <!-- Custom Pets Section -->
+          <div class="card">
+            <div class="card-header">
+              <h2>✨ Mis Mascotas Anime & Personalizadas (3D Sin Fondo)</h2>
+              <span class="badge">CREADAS POR TI</span>
+            </div>
+            <div class="pets-grid" id="customPetsGrid">
+              <div class="empty-state" id="emptyCustomPets">
+                No tienes mascotas personalizadas aún. ¡Crea una abajo con Comfy Desktop o sube una foto!
+              </div>
+            </div>
+          </div>
+
+          <!-- Create From Photo or Prompt -->
+          <div class="creation-columns">
+            <!-- Create from Photo -->
+            <div class="card creation-card">
+              <div class="card-header">
+                <h2>📸 Crear Mascota Anime 3D desde Foto</h2>
+              </div>
+              <p class="card-desc">Sube una imagen de cualquier personaje de anime, dibujo o mascota; el sistema quitará el fondo automáticamente y animará el personaje en 3D.</p>
+              
+              <div class="photo-upload-zone" id="photoDropZone">
+                <input type="file" id="filePhotoInput" accept="image/*" style="display:none;" />
+                <div class="upload-preview-box" id="uploadPreviewBox">
+                  <div class="upload-icon">📷</div>
+                  <span>Haz clic para seleccionar o arrastra una imagen</span>
+                </div>
+                <img id="photoPreviewImg" class="photo-preview-hidden" alt="Vista previa" />
+              </div>
+
+              <div class="form-group" style="margin-top: 14px;">
+                <label>Nombre para esta Mascota:</label>
+                <input type="text" id="photoPetNameInput" class="form-control" placeholder="Ej. Pikachu Anime 3D" />
+              </div>
+
+              <button class="btn btn-primary" id="btnSavePhotoPet" disabled>Guardar y Activar Mascota</button>
+            </div>
+
+            <!-- Generate with Comfy Desktop / AI Prompt -->
+            <div class="card creation-card">
+              <div class="card-header">
+                <h2>🎨 Generar Personaje Anime (Comfy Desktop)</h2>
+              </div>
+              <p class="card-desc">Abre <strong>Comfy Desktop</strong> en tu pantalla y genera un personaje de anime de alto nivel con <strong>Z-Image-Turbo</strong> y recorte 3D automático.</p>
+
+              <div class="form-group">
+                <label>Plantillas Rápidas de Anime:</label>
+                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px;">
+                  <button type="button" class="btn btn-secondary btn-sm btn-anime-preset" data-name="Kitsune Cyber Anime" data-style="anime" data-prompt="chibi anime cyber kitsune spirit companion with nine glowing neon green tails, futuristic anime headphones, floating magical energy orbs, vibrant anime cel shading, expressive emerald eyes, heroic full body standing pose">🦊 Kitsune Anime</button>
+                  <button type="button" class="btn btn-secondary btn-sm btn-anime-preset" data-name="Espadachín Anime Neón" data-style="anime" data-prompt="cool anime cyberpunk samurai warrior character with glowing emerald katana, sleek dark techwear jacket, spiky silver hair, glowing green eyes, dynamic full body standing pose, ufotable anime style">⚔️ Samurai Anime</button>
+                  <button type="button" class="btn btn-secondary btn-sm btn-anime-preset" data-name="Guerrero Aura Dorada" data-style="anime" data-prompt="powerful anime martial arts young hero with spiky golden hair, glowing electric energy sparks, orange and blue battle gi, dynamic full body standing pose, dragon ball super broly movie cel shading">🔥 Guerrero Saiyajin</button>
+                  <button type="button" class="btn btn-secondary btn-sm btn-anime-preset" data-name="Mecha Neko Waifu" data-style="cyberpunk" data-prompt="cute anime cyber neko girl companion with glowing green cat ears headset, futuristic cyber suit, floating hologram heart, vibrant cel-shaded anime key visual, full body standing pose">🐱 Cyber Neko</button>
+                </div>
+                <label>Descripción / Prompt del Personaje Anime:</label>
+                <textarea id="aiPromptInput" class="form-control" rows="3" placeholder="Ej: Guerrero anime con armadura cibernética verde flúor, ojos brillantes y pose heroica de cuerpo completo..."></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label>Estilo Anime:</label>
+                  <select id="aiStyleSelect" class="form-control">
+                    <option value="anime" selected>Anime Studio HD (Z-Image-Turbo)</option>
+                    <option value="cyberpunk">Anime Cyberpunk Trigger</option>
+                    <option value="chibi">Anime Chibi Kawaii 3D</option>
+                    <option value="pixel">Anime HD-2D Sprite</option>
+                  </select>
+                </div>
+                <div class="form-group flex-1">
+                  <label>Nombre:</label>
+                  <input type="text" id="aiPetNameInput" class="form-control" placeholder="Ej. Kitsune Anime" />
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom:10px; display:flex; flex-direction:column; gap:5px;">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:12px; color:#e2e8f0;">
+                  <input type="checkbox" id="chkUseComfyEngine" checked />
+                  <span>Usar conexión local <strong>Comfy Desktop (Z-Image-Turbo)</strong> para máxima calidad</span>
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:12px; color:#00ff44;">
+                  <input type="checkbox" id="chkComfyOpenScreen" checked />
+                  <span>🖥️ Abrir y mostrar <strong>Comfy Desktop</strong> trabajando en mi pantalla</span>
+                </label>
+              </div>
+
+              <button class="btn btn-neon" id="btnGenerateAiPet">
+                <span class="btn-text" id="btnGenerateAiPetText">🎨 Generar Personaje en Comfy Desktop</span>
+                <span class="spinner" id="genSpinner" style="display:none;">⏳</span>
+              </button>
+
+              <div id="aiGeneratedPreview" class="ai-preview-box" style="display:none;">
+                <img id="aiGeneratedImg" alt="Mascota Generada" />
+                <button class="btn btn-primary" id="btnAdoptAiPet" style="margin-top: 10px;">Adoptar y Activar Esta Mascota</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             TAB 2: DISPOSITIVOS & VOZ (AUDIO I/O + VOICES)
+             ========================================== -->
+        <section class="tab-pane" id="tab-voice">
+          <!-- Audio Devices Section -->
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>🎛️ Dispositivos de Audio y Micrófono</h2>
+              <span class="badge">HARDWARE SELECTOR</span>
+            </div>
+            <p class="card-desc">Elige exactamente qué micrófono usará la mascota para escucharte y qué altavoces o auriculares emitirán su voz:</p>
+
+            <div class="form-row">
+              <!-- Microphone Device -->
+              <div class="form-group flex-1">
+                <label>🎤 Dispositivo de Micrófono (Entrada):</label>
+                <select id="selectAudioInput" class="form-control">
+                  <option value="">Detectando micrófonos...</option>
+                </select>
+                <div class="device-test-bar">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btnTestMic">🎙️ Probar Micrófono en Vivo</button>
+                  <div class="mic-level-meter" id="micLevelMeter">
+                    <div class="mic-level-fill" id="micLevelFill"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Speaker Device -->
+              <div class="form-group flex-1">
+                <label>🔊 Dispositivo de Salida (Altavoces / Auriculares):</label>
+                <select id="selectAudioOutput" class="form-control">
+                  <option value="">Detectando altavoces...</option>
+                </select>
+                <div class="device-test-bar">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btnTestSpeaker">🔊 Probar Sonido en Salida</button>
+                  <span id="speakerStatus" class="test-status"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LiveKit Hands-Free Call Section -->
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>📞 Llamada en Vivo LiveKit ("Activar Ziro" Manos Libres)</h2>
+              <span class="badge" style="background:#00ff44; color:#070c0a;">SIEMPRE ESCUCHANDO</span>
+            </div>
+            <p class="card-desc">Habla con tu mascota en tiempo real como en una llamada en vivo sin tocar ningún botón. Di <strong>"Activar Ziro"</strong> (o háblale directamente) y la mascota te responderá con voz automáticamente.</p>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#00ff44; font-weight:600;">
+                  <input type="checkbox" id="chkLiveKitEnabled" checked />
+                  <span>📞 Activar Llamada en Vivo Manos Libres (Sin apretar botón de hablar)</span>
+                </label>
+                <p style="font-size:11px; color:var(--color-text-muted); margin-top:4px;">El micrófono permanece abierto con detección inteligente de voz (VAD + Pre-Roll) y pausa automáticamente cuando Ziro habla.</p>
+              </div>
+              <div class="form-group flex-1">
+                <label>Frase de Activación por Voz (Wake Word):</label>
+                <input type="text" id="inputLiveKitWakeWord" class="form-control" value="activar ziro" placeholder="activar ziro" />
+              </div>
+            </div>
+
+            <div class="slider-row" style="margin-top:8px;">
+              <div class="slider-group">
+                <label>Sensibilidad de Voz en Llamada (Umbral VAD): <span id="valLiveKitThreshold">8%</span></label>
+                <input type="range" id="sliderLiveKitThreshold" min="4" max="25" step="1" value="8" class="neon-slider" />
+              </div>
+              <div class="slider-group">
+                <label>Servidor LiveKit WebRTC / Room (Opcional):</label>
+                <input type="text" id="inputLiveKitServer" class="form-control" value="wss://ziro-livekit.livekit.cloud" placeholder="wss://tu-servidor.livekit.cloud" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Speech & Voices Section -->
+          <div class="card">
+            <div class="card-header">
+              <h2>🗣️ Voces en Español (Naturales e Inteligentes)</h2>
+              <span class="badge">NEURAL TTS</span>
+            </div>
+            <p class="card-desc">Selecciona la voz en español que más te guste para tu mascota. Incluye voces naturales de alta fidelidad con acentos de España, Argentina, México, Colombia y Chile:</p>
+
+            <div class="form-group">
+              <label>Voz Seleccionada:</label>
+              <select id="voiceSelect" class="form-control">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-group">
+                <label>Velocidad de Voz: <span id="valRate">1.05x</span></label>
+                <input type="range" id="sliderRate" min="0.5" max="1.8" step="0.05" value="1.05" class="neon-slider" />
+              </div>
+
+              <div class="slider-group">
+                <label>Tono / Pitch: <span id="valPitch">1.0</span></label>
+                <input type="range" id="sliderPitch" min="0.6" max="1.6" step="0.05" value="1.0" class="neon-slider" />
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <button class="btn btn-secondary" id="btnTestVoice">🔊 Probar Voz con la Mascota</button>
+            </div>
+          </div>
+
+          <!-- Natural Conversation Engine: 7-Stage Diagnostics & TTS Benchmark -->
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>📊 Diagnóstico de Conversación Natural (7 Tiempos Reales)</h2>
+              <span class="badge" id="voiceDiagLiveBadge">STREAMING + DAEMON</span>
+            </div>
+            <p class="card-desc">Medición real paso a paso desde el fin de voz hasta el primer sonido reproducido (sin suposiciones):</p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; margin-bottom:12px;">
+              <div class="pf-panel" style="padding:8px;"><div style="font-size:10px; color:var(--color-text-dim);">1. FIN DE VOZ (VAD)</div><div id="dDiagVadMs" style="font-size:15px; font-weight:800; color:#00ff88;">-- ms</div></div>
+              <div class="pf-panel" style="padding:8px;"><div style="font-size:10px; color:var(--color-text-dim);">2. TRANSCRIPCIÓN STT</div><div id="dDiagSttMs" style="font-size:15px; font-weight:800; color:#00ff88;">-- ms</div></div>
+              <div class="pf-panel" style="padding:8px;"><div style="font-size:10px; color:var(--color-text-dim);">3. LLM PROCESO TOTAL</div><div id="dDiagLlmMs" style="font-size:15px; font-weight:800; color:#00ff88;">-- ms</div></div>
+              <div class="pf-panel" style="padding:8px;"><div style="font-size:10px; color:var(--color-text-dim);">4. PRIMER FRAGMENTO LLM</div><div id="dDiagFirstTextMs" style="font-size:15px; font-weight:800; color:#00ff88;">-- ms</div></div>
+              <div class="pf-panel" style="padding:8px;"><div style="font-size:10px; color:var(--color-text-dim);">5. SÍNTESIS TTS</div><div id="dDiagTtsMs" style="font-size:15px; font-weight:800; color:#00ff88;">-- ms</div></div>
+              <div class="pf-panel" style="padding:8px;"><div style="font-size:10px; color:var(--color-text-dim);">6. PRIMER SONIDO</div><div id="dDiagFirstAudioMs" style="font-size:15px; font-weight:800; color:#00e5ff;">-- ms</div></div>
+              <div class="pf-panel" style="padding:8px;"><div style="font-size:10px; color:var(--color-text-dim);">7. TOTAL RESPUESTA</div><div id="dDiagTotalMs" style="font-size:15px; font-weight:800; color:#00e5ff;">-- ms</div></div>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary" id="btnRunTtsBenchmark" style="font-size:12px;">🧪 Ejecutar Pruebas Comparativas TTS (Real)</button>
+              <span id="ttsBenchStatus" style="font-size:11.5px; color:var(--ziro-secondary);">Compara Edge Daemon Streaming vs Cold Spawn vs Piper Local</span>
+            </div>
+            <div id="ttsBenchResults" style="margin-top:10px; font-size:11.5px;"></div>
+          </div>
+
+          <!-- Load Custom Voice / Sound from PC -->
+          <div class="card">
+            <div class="card-header">
+              <h2>📁 Cargar Voz o Sonido Descargado en tu PC</h2>
+              <span class="badge">ARCHIVOS LOCALES</span>
+            </div>
+            <p class="card-desc">¿Tienes un archivo de voz o sonido descargado en tu ordenador (.mp3, .wav, .ogg)? Puedes cargarlo aquí para agregarlo a la mascota.</p>
+
+            <div class="custom-voice-upload-zone" id="voiceDropZone">
+              <input type="file" id="fileVoiceInput" accept="audio/*" style="display:none;" />
+              <div class="upload-icon">🎵</div>
+              <span>Haz clic para seleccionar un archivo de audio (.mp3, .wav, .ogg)</span>
+              <span id="customVoiceLoadedName" style="color:var(--color-neon-fluor); font-weight:700; margin-top:6px; display:none;"></span>
+            </div>
+
+            <div class="form-group inline-group" style="margin-top: 14px;">
+              <input type="text" id="customVoiceNameInput" class="form-control" placeholder="Nombre para esta voz (ej. Mi Voz Anime, Sonido Especial)" />
+              <button class="btn btn-primary" id="btnSaveCustomVoice" disabled>Guardar Voz</button>
+            </div>
+
+            <div class="custom-voices-list" id="customVoicesList" style="margin-top: 14px;">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- General Audio Toggles -->
+          <div class="card">
+            <div class="card-header">
+              <h2>⚙️ Opciones de Comportamiento</h2>
+            </div>
+
+            <div class="toggle-list">
+              <div class="toggle-item">
+                <div class="toggle-text">
+                  <strong>Entrada por Voz (Micrófono)</strong>
+                  <p>Permite hablarle en tiempo real con el botón del micrófono.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="chkSttEnabled" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-item">
+                <div class="toggle-text">
+                  <strong>Respuesta con Voz (Text to Speech)</strong>
+                  <p>La mascota habla en voz alta cuando te responde un mensaje o ejecuta un comando.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="chkTtsEnabled" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-item">
+                <div class="toggle-text">
+                  <strong>Hablar Automáticamente</strong>
+                  <p>Pronunciar cada respuesta inmediatamente al recibirla.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="chkAutoSpeak" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             TAB 3: CONEXIÓN DE IA (LOCAL / INTERNET)
+             ========================================== -->
+        <section class="tab-pane" id="tab-ai">
+          <div class="card">
+            <div class="card-header">
+              <h2>🧠 Modo de Inteligencia Artificial</h2>
+              <span class="badge">FLEXIBLE</span>
+            </div>
+            <p class="card-desc">Conecta a ZIRO con modelos locales en tu PC o con las APIs más potentes de Internet.</p>
+
+            <div class="ai-mode-selector">
+              <label class="mode-option">
+                <input type="radio" name="aiMode" value="offline" checked />
+                <div class="mode-box">
+                  <div class="mode-icon">⚡</div>
+                  <div class="mode-info">
+                    <strong>Asistente Rápido Integrado (Sin configuración)</strong>
+                    <p>Listo para usar de inmediato, responde a comandos de voz, charla amigable y ejecuta acciones sin internet ni claves.</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="mode-option">
+                <input type="radio" name="aiMode" value="local-ollama" />
+                <div class="mode-box">
+                  <div class="mode-icon">💻</div>
+                  <div class="mode-info">
+                    <strong>IA Local: Ollama (100% privado en tu PC)</strong>
+                    <p>Conéctate a Ollama corriendo localmente. Soporta Llama 3, DeepSeek, Mistral, Qwen, etc.</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="mode-option">
+                <input type="radio" name="aiMode" value="local-lmstudio" />
+                <div class="mode-box">
+                  <div class="mode-icon">🖥️</div>
+                  <div class="mode-info">
+                    <strong>IA Local: LM Studio / LocalAI / OpenAI Compatible</strong>
+                    <p>Conexión por puerto local a LM Studio (puerto 1234) o cualquier servidor OpenAI compatible.</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="mode-option">
+                <input type="radio" name="aiMode" value="cloud-groq" />
+                <div class="mode-box">
+                  <div class="mode-icon">🚀</div>
+                  <div class="mode-info">
+                    <strong>IA en Internet: Groq Cloud (Gratis & Ultra Rápido)</strong>
+                    <p>Velocidad instantánea para respuestas de voz y Whisper transcripción ultra rápida.</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="mode-option">
+                <input type="radio" name="aiMode" value="cloud-gemini" />
+                <div class="mode-box">
+                  <div class="mode-icon">🌐</div>
+                  <div class="mode-info">
+                    <strong>IA en Internet: Google Gemini API</strong>
+                    <p>Usa Gemini 1.5 Flash o Gemini 2.0 con tu API Key de Google AI Studio.</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="mode-option">
+                <input type="radio" name="aiMode" value="cloud-openai" />
+                <div class="mode-box">
+                  <div class="mode-icon">🤖</div>
+                  <div class="mode-info">
+                    <strong>IA en Internet: OpenAI (ChatGPT)</strong>
+                    <p>Utiliza GPT-4o-mini o GPT-4o con tu API Key oficial de OpenAI.</p>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Dynamic Configuration Fields -->
+          <div class="card" id="aiConfigParams">
+            <div class="card-header">
+              <h2>⚙️ Parámetros de Conexión</h2>
+            </div>
+
+            <!-- Local Settings -->
+            <div id="paramsLocal" class="params-block">
+              <div class="form-group">
+                <label>URL del Servidor Local:</label>
+                <input type="text" id="aiLocalEndpoint" class="form-control" value="http://localhost:11434" />
+                <small class="help-text">Por defecto para Ollama: <code>http://localhost:11434</code> | Para LM Studio: <code>http://localhost:1234/v1</code></small>
+              </div>
+              <div class="form-group">
+                <label>Nombre del Modelo Local:</label>
+                <input type="text" id="aiLocalModel" class="form-control" value="llama3" placeholder="ej. llama3, mistral, deepseek-r1:8b" />
+              </div>
+            </div>
+
+            <!-- Cloud Settings -->
+            <div id="paramsCloud" class="params-block" style="display:none;">
+              <div class="form-group">
+                <label>API Key:</label>
+                <div class="input-password-wrapper">
+                  <input type="password" id="aiApiKey" class="form-control" placeholder="Introduce tu clave API..." />
+                  <button type="button" class="btn-peek" id="btnToggleApiKey">👁️</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Modelo en la Nube:</label>
+                <input type="text" id="aiCloudModel" class="form-control" placeholder="ej. llama-3.3-70b-versatile o gemini-1.5-flash" />
+              </div>
+            </div>
+
+            <!-- System Prompt / Personality -->
+            <div class="form-group" style="margin-top: 14px;">
+              <label>Personalidad de la Mascota (Prompt de Sistema):</label>
+              <textarea id="aiCustomPrompt" class="form-control" rows="3" placeholder="Deja vacío para usar la personalidad cyber amigable por defecto."></textarea>
+            </div>
+
+            <div class="test-connection-bar">
+              <button class="btn btn-secondary" id="btnTestAiConnection">Probar Conexión con la Mascota</button>
+              <span id="testConnectionStatus" class="test-status"></span>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             TAB 4: COMANDOS POR VOZ
+             ========================================== -->
+        <section class="tab-pane" id="tab-commands">
+          <div class="card">
+            <div class="card-header">
+              <h2>⚡ Comandos por Voz Integrados</h2>
+              <span class="badge">NATIVOS WINDOWS</span>
+            </div>
+            <p class="card-desc">Solo di estas frases por el micrófono y ZIRO las ejecutará al instante en tiempo real:</p>
+
+            <div class="commands-table-wrapper">
+              <table class="commands-table">
+                <thead>
+                  <tr>
+                    <th>Frase de Voz</th>
+                    <th>Acción que Realiza</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code class="cmd-chip">"abrime youtube"</code></td>
+                    <td>Abre YouTube en tu navegador web predeterminado</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                  <tr>
+                    <td><code class="cmd-chip">"busca [cancion/tema] en youtube"</code></td>
+                    <td>Busca y reproduce videos directamente en YouTube</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                  <tr>
+                    <td><code class="cmd-chip">"abrime la calculadora"</code></td>
+                    <td>Ejecuta la Calculadora de Windows</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                  <tr>
+                    <td><code class="cmd-chip">"abrime el bloc de notas"</code></td>
+                    <td>Abre el Bloc de Notas de Windows</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                  <tr>
+                    <td><code class="cmd-chip">"abrime el explorador de archivos"</code></td>
+                    <td>Abre el explorador de carpetas de Windows</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                  <tr>
+                    <td><code class="cmd-chip">"abrime spotify"</code></td>
+                    <td>Inicia Spotify en tu escritorio o web</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                  <tr>
+                    <td><code class="cmd-chip">"abrime discord"</code></td>
+                    <td>Inicia Discord</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                  <tr>
+                    <td><code class="cmd-chip">"abrime steam"</code></td>
+                    <td>Inicia la plataforma Steam</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                  <tr>
+                    <td><code class="cmd-chip">"abrime google"</code> o <code class="cmd-chip">"busca [tema]"</code></td>
+                    <td>Realiza búsquedas instantáneas en Google</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                  <tr>
+                    <td><code class="cmd-chip">"que hora es"</code> o <code class="cmd-chip">"que dia es"</code></td>
+                    <td>Te dice la hora exacta y la fecha actual</td>
+                    <td><span class="status-badge-ok">Activo</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Custom Commands Section -->
+          <div class="card">
+            <div class="card-header">
+              <h2>➕ Añadir Comando Personalizado</h2>
+              <span class="badge">TUS PROGRAMAS</span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>Frase que dirás por voz:</label>
+                <input type="text" id="customCmdTrigger" class="form-control" placeholder="ej. abrime twitch o abrime blender" />
+              </div>
+
+              <div class="form-group flex-1">
+                <label>Tipo de Acción:</label>
+                <select id="customCmdType" class="form-control">
+                  <option value="url">Abrir Sitio Web (URL)</option>
+                  <option value="program">Ejecutar Programa (.exe / comando)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Destino (URL o Ruta):</label>
+              <input type="text" id="customCmdTarget" class="form-control" placeholder="ej. https://twitch.tv o blender.exe" />
+            </div>
+
+            <button class="btn btn-primary" id="btnAddCustomCmd">Añadir Comando</button>
+
+            <div class="custom-commands-list" id="customCommandsList" style="margin-top: 14px;">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             TAB 5: APARIENCIA & INSTALADOR .EXE
+             ========================================== -->
+        <section class="tab-pane" id="tab-appearance">
+          <div class="card">
+            <div class="card-header">
+              <h2>🖥️ Configuración de la Ventana</h2>
+              <span class="badge">ESCRITORIO</span>
+            </div>
+
+            <div class="toggle-list">
+              <div class="toggle-item">
+                <div class="toggle-text">
+                  <strong>Siempre visible al frente (Always on top)</strong>
+                  <p>Mantiene a tu mascota flotando por encima de juegos y ventanas de trabajo.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="chkAlwaysOnTop" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 16px;">
+              <label>Tamaño de la Mascota (Escalable hasta 1080p sin límite de marco invisible):</label>
+              <div class="scale-buttons" id="scaleButtons">
+                <button type="button" class="btn-scale" data-scale="0.7">Chico (70%)</button>
+                <button type="button" class="btn-scale active" data-scale="1.0">Normal (100%)</button>
+                <button type="button" class="btn-scale" data-scale="1.5">Grande (150%)</button>
+                <button type="button" class="btn-scale" data-scale="2.2">Gigante (220%)</button>
+                <button type="button" class="btn-scale" data-scale="2.8">Mega (280%)</button>
+                <button type="button" class="btn-scale" data-scale="3.5">Pantalla Completa (350%)</button>
+              </div>
+              <div style="margin-top: 12px; display: flex; align-items: center; gap: 12px;">
+                <input type="range" id="sliderPetScale" min="0.5" max="3.5" step="0.05" value="1.0" style="flex: 1; accent-color: var(--color-neon-fluor);" />
+                <span id="lblPetScaleVal" style="color: var(--color-neon-fluor); font-weight: bold; min-width: 80px;">100%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Holographic Rings & Particle Trail Customization -->
+          <div class="card neon-card" id="cardAuraCustomization">
+            <div class="card-header">
+              <h2>✨ Aros Holográficos y Estela de Efectos 3D</h2>
+              <span class="badge">PERSONALIZACIÓN VISUAL</span>
+            </div>
+            <p class="card-desc">
+              Personaliza el color de los aros de energía orbitales y la estela de partículas mágicas que envuelven a tu mascota en el escritorio:
+            </p>
+
+            <div style="margin-top: 15px;">
+              <label style="display:block; font-weight:600; color: #a3ffc7; margin-bottom: 8px;">🎨 Color de los Aros Orbitales:</label>
+              <div class="rings-palette" id="ringsPalette" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button type="button" class="btn-palette active" data-ring1="#00ff44" data-ring2="#00e5ff" style="background: linear-gradient(135deg, #00ff44, #00e5ff); border: 2px solid #fff; border-radius: 8px; padding: 8px 14px; color: #000; font-weight: 700; cursor: pointer;">Fluor & Cyan (Original)</button>
+                <button type="button" class="btn-palette" data-ring1="#ffd700" data-ring2="#ff9900" style="background: linear-gradient(135deg, #ffd700, #ff9900); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #000; font-weight: 700; cursor: pointer;">Aura Dorada</button>
+                <button type="button" class="btn-palette" data-ring1="#ff007f" data-ring2="#9900ff" style="background: linear-gradient(135deg, #ff007f, #9900ff); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #fff; font-weight: 700; cursor: pointer;">Rosa Neón & Violeta</button>
+                <button type="button" class="btn-palette" data-ring1="#00ffff" data-ring2="#0088ff" style="background: linear-gradient(135deg, #00ffff, #0088ff); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #000; font-weight: 700; cursor: pointer;">Cyan Eléctrico</button>
+                <button type="button" class="btn-palette" data-ring1="#ff3333" data-ring2="#ff7700" style="background: linear-gradient(135deg, #ff3333, #ff7700); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #fff; font-weight: 700; cursor: pointer;">Rojo Fuego</button>
+                <button type="button" class="btn-palette" data-ring1="#ffffff" data-ring2="#88ffff" style="background: linear-gradient(135deg, #ffffff, #88ffff); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #000; font-weight: 700; cursor: pointer;">Blanco Diamante</button>
+                <button type="button" class="btn-palette" data-ring1="#00ff88" data-ring2="#00b347" style="background: linear-gradient(135deg, #00ff88, #00b347); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #000; font-weight: 700; cursor: pointer;">Esmeralda Matrix</button>
+                <button type="button" class="btn-palette" data-ring1="#b5179e" data-ring2="#4cc9f0" style="background: linear-gradient(135deg, #b5179e, #4cc9f0); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #fff; font-weight: 700; cursor: pointer;">Galaxia Cyber</button>
+                <button type="button" class="btn-palette" data-ring1="#aaff00" data-ring2="#00ffaa" style="background: linear-gradient(135deg, #aaff00, #00ffaa); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #000; font-weight: 700; cursor: pointer;">Lima Ácido</button>
+                <button type="button" class="btn-palette" data-ring1="#ff5500" data-ring2="#ffcc00" style="background: linear-gradient(135deg, #ff5500, #ffcc00); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #000; font-weight: 700; cursor: pointer;">Solar Plasma</button>
+                <button type="button" class="btn-palette" data-ring1="#3a86ff" data-ring2="#8338ec" style="background: linear-gradient(135deg, #3a86ff, #8338ec); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #fff; font-weight: 700; cursor: pointer;">Azul Quantum</button>
+                <button type="button" class="btn-palette" data-ring1="#ff0055" data-ring2="#00ffcc" style="background: linear-gradient(135deg, #ff0055, #00ffcc); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #fff; font-weight: 700; cursor: pointer;">Synthwave Dual</button>
+                <button type="button" class="btn-palette" data-ring1="#ff1e56" data-ring2="#ffac41" style="background: linear-gradient(135deg, #ff1e56, #ffac41); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #fff; font-weight: 700; cursor: pointer;">Inferno Carmesí</button>
+                <button type="button" class="btn-palette" data-ring1="#72efdd" data-ring2="#64dfdf" style="background: linear-gradient(135deg, #72efdd, #64dfdf); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 14px; color: #000; font-weight: 700; cursor: pointer;">Menta Glacial</button>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 18px;">
+              <div class="form-group">
+                <label for="selectParticleEffect" style="display:block; font-weight:600; color: #00ff44; margin-bottom: 6px;">✨ Tipo de Estela de Partículas:</label>
+                <select id="selectParticleEffect" class="form-control">
+                  <option value="estrellas" selected>⭐ Estela de Estrellas (Por Defecto)</option>
+                  <option value="corazones">💖 Corazones Flotantes</option>
+                  <option value="chispas">⚡ Chispas Eléctricas</option>
+                  <option value="burbujas">🫧 Burbujas Mágicas</option>
+                  <option value="polvo">✨ Polvo Fluor Cuántico</option>
+                  <option value="ninguno">🚫 Sin Partículas</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="inputParticleColor" style="display:block; font-weight:600; color: #a3ffc7; margin-bottom: 6px;">🎯 Color de las Partículas:</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="color" id="inputParticleColor" value="#00ff44" style="width: 48px; height: 38px; border: 1px solid #00ff44; border-radius: 6px; background: transparent; cursor: pointer;" />
+                  <span id="particleColorHex" style="font-family: monospace; color: #00ff44; font-size: 14px;">#00ff44</span>
+                </div>
+              </div>
+            </div>
+            <p style="margin-top: 10px; font-size: 13px; color: #8ee9b2;">
+              🎙️ <em>También puedes cambiarlo por voz diciendo: "aros dorados", "aros cyan", "estela de estrellas", "estela de corazones", "chispas eléctricas", etc.</em>
+            </p>
+          </div>
+
+          <!-- APARIENCIA ZIRO: PERSONALIZACIÓN TOTAL DE COLORES Y ANIMACIONES -->
+          <div class="card neon-card" id="cardZiroThemeEngine">
+            <div class="card-header">
+              <h2>🎨 APARIENCIA ZIRO — Paletas, HEX/RGB y Animaciones</h2>
+              <span class="badge">LIVE THEME ENGINE</span>
+            </div>
+            <p class="card-desc">Modifica en vivo colores, iluminación, neón, transparencia y velocidad de animaciones en toda la plataforma (incluyendo Procedural Framework y Finisher Studio):</p>
+
+            <label style="display:block; font-weight:700; color: var(--ziro-primary); margin-bottom:8px;">Paletas Iniciales:</label>
+            <div id="ziroThemePresets" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+              <button type="button" class="btn btn-secondary ziro-palette-btn" data-pal="verde-matrix">🟢 Verde Matrix</button>
+              <button type="button" class="btn btn-secondary ziro-palette-btn" data-pal="violeta-cyber">🟣 Violeta Cyber</button>
+              <button type="button" class="btn btn-secondary ziro-palette-btn" data-pal="azul-quantum">🔵 Azul Quantum</button>
+              <button type="button" class="btn btn-secondary ziro-palette-btn" data-pal="cian-electrico">💎 Cian Eléctrico</button>
+              <button type="button" class="btn btn-secondary ziro-palette-btn" data-pal="rojo-inferno">🔴 Rojo Inferno</button>
+              <button type="button" class="btn btn-secondary ziro-palette-btn" data-pal="rosa-neon">🌸 Rosa Neón</button>
+              <button type="button" class="btn btn-secondary ziro-palette-btn" data-pal="blanco-hielo">❄️ Blanco Hielo</button>
+              <button type="button" class="btn btn-secondary ziro-palette-btn" data-pal="personalizado">🎛️ Personalizado</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(175px, 1fr)); gap:10px; margin-bottom:14px;">
+              <div><label style="font-size:11.5px;">Color Principal:</label><div style="display:flex;gap:6px;"><input type="color" id="themePrimaryColor" value="#00ff44"><input type="text" id="themePrimaryHex" class="form-control" value="#00ff44" style="font-size:11px;padding:4px;"></div></div>
+              <div><label style="font-size:11.5px;">Color Secundario:</label><div style="display:flex;gap:6px;"><input type="color" id="themeSecondaryColor" value="#00f0ff"><input type="text" id="themeSecondaryHex" class="form-control" value="#00f0ff" style="font-size:11px;padding:4px;"></div></div>
+              <div><label style="font-size:11.5px;">Color de Bordes:</label><div style="display:flex;gap:6px;"><input type="color" id="themeBorderColor" value="#00ff44"><input type="text" id="themeBorderHex" class="form-control" value="#00ff44" style="font-size:11px;padding:4px;"></div></div>
+              <div><label style="font-size:11.5px;">Iluminación / Glow:</label><div style="display:flex;gap:6px;"><input type="color" id="themeGlowColor" value="#00ff44"><input type="text" id="themeGlowHex" class="form-control" value="#00ff44" style="font-size:11px;padding:4px;"></div></div>
+              <div><label style="font-size:11.5px;">Color Botones:</label><div style="display:flex;gap:6px;"><input type="color" id="themeButtonColor" value="#00ff44"><input type="text" id="themeButtonHex" class="form-control" value="#00ff44" style="font-size:11px;padding:4px;"></div></div>
+              <div><label style="font-size:11.5px;">Color Indicadores:</label><div style="display:flex;gap:6px;"><input type="color" id="themeIndicatorColor" value="#39ff14"><input type="text" id="themeIndicatorHex" class="form-control" value="#39ff14" style="font-size:11px;padding:4px;"></div></div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin-bottom:14px;">
+              <div><label style="font-size:12px;">Código RGB Directo (ej: 0, 255, 68):</label><input type="text" id="themeRgbInput" class="form-control" placeholder="0, 255, 68" /></div>
+              <div><label style="font-size:12px;">Intensidad Neón (<span id="lblNeonInt">85%</span>):</label><input type="range" id="themeNeonInt" min="0" max="100" value="85" style="width:100%;"></div>
+              <div><label style="font-size:12px;">Transparencia Paneles (<span id="lblPanelAlpha">92%</span>):</label><input type="range" id="themePanelAlpha" min="55" max="100" value="92" style="width:100%;"></div>
+              <div><label style="font-size:12px;">Brillo Global (<span id="lblBrightness">100%</span>):</label><input type="range" id="themeBrightness" min="70" max="130" value="100" style="width:100%;"></div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; padding:10px; background:rgba(0,0,0,0.3); border-radius:8px; margin-bottom:12px;">
+              <label style="font-size:12.5px;"><input type="checkbox" id="chkAnimEnabled" checked> ✨ Activar Animaciones Holográficas / Escaneo</label>
+              <label style="font-size:12.5px;"><input type="checkbox" id="chkAnimReduced"> ⚡ Reducir Movimiento</label>
+              <div><label style="font-size:12px;">Velocidad de Animación (<span id="lblAnimSpeed">1.0x</span>):</label><input type="range" id="sliderAnimSpeed" min="0.4" max="2.2" step="0.1" value="1.0" style="width:100%;"></div>
+            </div>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+              <input type="text" id="inputSavePaletteName" class="form-control" placeholder="Nombre para guardar paleta..." style="max-width:220px;" />
+              <button type="button" class="btn btn-primary" id="btnSaveCustomPalette">💾 Guardar Paleta</button>
+              <select id="selectSavedPalettes" class="form-control" style="max-width:200px;"><option value="">Cargar paleta guardada...</option></select>
+              <button type="button" class="btn btn-secondary" id="btnRestoreDefaultTheme">🔄 Restaurar Original</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 6: UNREAL ENGINE 5 (ZIROAI.uplugin) INTEGRATION
+             ========================================== -->
+        <section class="tab-pane" id="tab-unreal">
+          <!-- Connection Status Card -->
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>🎮 Conexión en Tiempo Real con ZIROAI.uplugin (ZiroHost)</h2>
+              <span class="badge" id="ueStatusBadge">LISTO</span>
+            </div>
+            <p class="card-desc">
+              Tu mascota virtual se comunica en tiempo real con el plugin <strong>ZIROAI.uplugin</strong> en <code>D:\legolas-ai-v1.0\ZiroHost\Plugins\ZIROAI\ZIROAI.uplugin</code> (84 herramientas C++ + WebSocket 8765 + GameThread Bridge) para ejecutar tus órdenes por voz directamente en el escenario de tu nivel abierto.
+            </p>
+
+            <div class="grid-2-cols" style="margin-top: 15px;">
+              <div class="form-group">
+                <label>Host ZIROAI Bridge:</label>
+                <input type="text" id="ueHost" class="form-control" value="127.0.0.1" placeholder="127.0.0.1">
+              </div>
+              <div class="form-group">
+                <label>Puerto ZIROAI VoiceService (WS):</label>
+                <input type="number" id="uePort" class="form-control" value="8765" placeholder="8765">
+              </div>
+            </div>
+
+            <div class="ue-status-row" style="display: flex; gap: 12px; align-items: center; margin-top: 12px; flex-wrap: wrap;">
+              <button class="btn btn-primary" id="btnTestUeConnection">⚡ Probar Conexión con ZIROAI.uplugin</button>
+              <div id="ueConnectionResult" class="ue-result-text" style="color: #00ff44; font-size: 0.9rem;">
+                Estado: Enlazado con D:\legolas-ai-v1.0\ZiroHost\Plugins\ZIROAI\ZIROAI.uplugin
+              </div>
+            </div>
+          </div>
+
+          <!-- Selector de Proyectos Unreal Engine (.uproject) -->
+          <div class="card neon-card" id="cardUeProjects">
+            <div class="card-header">
+              <h2>📁 Proyectos de Unreal Engine (.uproject)</h2>
+              <span class="badge" id="activeProjectBadge">PROYECTO ACTIVO</span>
+            </div>
+            <p class="card-desc">
+              Selecciona qué proyecto de Unreal Engine abrir para aplicar modificaciones y generación en tiempo real:
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; margin-top: 12px;">
+              <select id="ueProjectSelect" class="form-control" style="font-size: 0.95rem;">
+                <option value="">Cargando proyectos detectados...</option>
+              </select>
+              <button class="btn btn-secondary" id="btnBrowseUproject" title="Buscar otro .uproject en tus discos">📂 Examinar...</button>
+              <button class="btn btn-primary" id="btnLaunchUproject" title="Abrir proyecto en Unreal Engine">🚀 Abrir Proyecto</button>
+            </div>
+            <div id="activeProjectInfo" style="margin-top: 10px; font-size: 13px; color: #a0aec0;">
+              Ruta activa: <code id="activeProjectPath" style="color: #00ff44;">Ninguno seleccionado (elige tu .uproject arriba; nunca se usa ZiroHost automáticamente)</code>
+            </div>
+          </div>
+
+          <!-- MÓDULO ZIRO PROCEDURAL ARCHITECT (UNREAL ENGINE 5.8) -->
+          <div class="card neon-card" id="cardArchitectureModels" style="border: 2px solid #00ff44;">
+            <div class="card-header" style="border-bottom: 1px solid rgba(0, 255, 68, 0.3); padding-bottom: 12px;">
+              <div>
+                <h2 style="font-size: 1.35rem; color: #00ff44; margin: 0;">🏛️ MÓDULO ZIRO PROCEDURAL ARCHITECT</h2>
+                <span style="font-size: 0.85rem; color: #a3ffc7;">Generador procedural de edificios y construcciones 3D para Unreal Engine 5.8</span>
+              </div>
+              <span class="badge" style="background: #00ff44; color: #070c0a; font-weight: 800;">DIVERSIDAD REAL</span>
+            </div>
+
+            <p class="card-desc" style="margin-top: 10px;">
+              Sistema basado en geometría modular y generación procedural real para Unreal Engine 5.8. Produce construcciones visualmente distintas sin depender de escalados repetitivos.
+            </p>
+
+            <!-- 1. SELECTORES DE TIPOLOGÍA, FOOTPRINT Y ESTILO -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 14px;">
+              <div class="form-group">
+                <label for="selectArchitectureType" style="display:block; font-weight:600; color: #00ff44; margin-bottom: 6px;">1. Tipo de Construcción (15 Tipos):</label>
+                <select id="selectArchitectureType" class="form-control" style="font-size: 0.95rem;">
+                  <option value="escuela">🏫 Escuela / Colegio</option>
+                  <option value="iglesia">⛪ Iglesia / Catedral / Capilla</option>
+                  <option value="hospital">🏥 Hospital / Clínica</option>
+                  <option value="comisaria">👮 Comisaría / Cuartel</option>
+                  <option value="casa" selected>🏠 Casa / Residencia Familiar</option>
+                  <option value="edificio_residencial">🏢 Edificio Residencial (Departamentos)</option>
+                  <option value="edificio_comercial">🏬 Edificio Comercial (Galería/Locales)</option>
+                  <option value="fabrica">🏭 Fábrica / Planta de Producción</option>
+                  <option value="almacen">📦 Almacén / Depósito Industrial</option>
+                  <option value="estacion_servicio">⛽ Estación de Servicio / Gasolinera</option>
+                  <option value="hotel">🏨 Hotel / Resort</option>
+                  <option value="oficinas">🏢 Torre / Complejo de Oficinas</option>
+                  <option value="centro_comercial">🛍️ Centro Comercial / Mall</option>
+                  <option value="industrial">🏗️ Edificio Industrial Pesado</option>
+                  <option value="construccion_abandonada">🏚️ Construcción Abandonada (Ruina)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="selectArchFootprint" style="display:block; font-weight:600; color: #a3ffc7; margin-bottom: 6px;">2. Forma de la Estructura (Footprint):</label>
+                <select id="selectArchFootprint" class="form-control">
+                  <option value="auto">🎲 Automático por Arquetipo</option>
+                  <option value="rectangular">📐 Rectangular Estándar</option>
+                  <option value="l_shape">🔲 Forma en L (L-Shape)</option>
+                  <option value="u_shape">🏛️ Forma en U con Patio (U-Shape)</option>
+                  <option value="h_shape">🏢 Forma en H (Alas Paralelas)</option>
+                  <option value="cruciform">✝️ Cruciforme / Basílica</option>
+                  <option value="courtyard">🏟️ Patio Central / Claustro</option>
+                  <option value="sawtooth_bay">🏭 Nave Industrial Diente de Sierra</option>
+                  <option value="stepped_tower">🏙️ Escalonado con Terrazas (Setback)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="selectArchRoof" style="display:block; font-weight:600; color: #a3ffc7; margin-bottom: 6px;">3. Estilo de Techo:</label>
+                <select id="selectArchRoof" class="form-control">
+                  <option value="auto">🎲 Automático por Arquetipo</option>
+                  <option value="gable">🏠 A dos aguas (Gable)</option>
+                  <option value="hip">⛺ A cuatro aguas (Hip)</option>
+                  <option value="flat_parapet">🏢 Plano con parapeto y casetón</option>
+                  <option value="mansard">🇫🇷 Mansarda francesa con quiebre</option>
+                  <option value="sawtooth">🏭 Diente de sierra con lucernarios</option>
+                  <option value="bell_tower">⛪ Campanario / Aguja eclesiástica</option>
+                  <option value="terrace">🌿 Terraza transitable con barandillas</option>
+                  <option value="collapsed">💥 Colapsado / Derrumbado (Terror)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="selectArchFacade" style="display:block; font-weight:600; color: #a3ffc7; margin-bottom: 6px;">4. Estilo de Fachada:</label>
+                <select id="selectArchFacade" class="form-control">
+                  <option value="auto">🎲 Automático por Arquetipo</option>
+                  <option value="grid_modern">🏢 Grilla Moderna Modular</option>
+                  <option value="ribbon_office">🪟 Fajas Continuas de Vidrio</option>
+                  <option value="arched_classic">🏛️ Arcos Clásicos de Medio Punto</option>
+                  <option value="gothic_lancet">⛪ Ojivas Góticas y Vitrales</option>
+                  <option value="industrial_clerestory">🏭 Claristorio Industrial</option>
+                  <option value="storefront_arcade">🏬 Vidriera y Recova Comercial</option>
+                  <option value="brutalist_fins">🧱 Brutalista con Parasoles de Hormigón</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 2. SEMILLA ALEATORIA, INTENSIDAD Y FAVORITOS -->
+            <div style="margin-top: 12px; padding: 12px; background: rgba(0, 20, 10, 0.7); border: 1px solid rgba(0, 255, 68, 0.25); border-radius: 8px;">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; align-items: end;">
+                <div class="form-group" style="margin: 0;">
+                  <label for="inputArchSeed" style="display:block; font-weight:600; color: #00ff44; margin-bottom: 4px;">🎲 Semilla Aleatoria (Seed):</label>
+                  <div style="display: flex; gap: 6px;">
+                    <input type="number" id="inputArchSeed" class="form-control" value="1001" style="font-family: monospace; font-weight: bold;" />
+                    <button type="button" class="btn btn-secondary" id="btnArchNewSeed" title="Generar nueva semilla aleatoria">🎲</button>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin: 0;">
+                  <label for="selectArchIntensity" style="display:block; font-weight:600; color: #a3ffc7; margin-bottom: 4px;">Intensidad de Variación:</label>
+                  <select id="selectArchIntensity" class="form-control">
+                    <option value="baja">Baja (Variación sutil ±10%)</option>
+                    <option value="media" selected>Media (Variación equilibrada ±30%)</option>
+                    <option value="alta">Alta (Extrema con alas y cambios ±60%)</option>
+                  </select>
+                </div>
+
+                <div class="form-group" style="margin: 0;">
+                  <label for="inputArchFloors" style="display:block; font-weight:600; color: #a3ffc7; margin-bottom: 4px;">Plantas / Pisos:</label>
+                  <input type="number" id="inputArchFloors" class="form-control" value="2" min="1" max="12" />
+                </div>
+
+                <div class="form-group" style="margin: 0;">
+                  <label style="display:block; font-weight:600; color: #a3ffc7; margin-bottom: 4px;">Variantes Favoritas:</label>
+                  <div style="display: flex; gap: 6px;">
+                    <select id="selectArchFavs" class="form-control" style="font-size: 0.85rem;">
+                      <option value="">Cargar variante guardada...</option>
+                    </select>
+                    <button type="button" class="btn btn-secondary" id="btnArchSaveFav" title="Guardar variante actual con semilla">⭐ Guardar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. PERFIL ESPECIALIZADO DE TERROR & DETERIORO -->
+            <div style="margin-top: 12px; padding: 12px; background: rgba(30, 10, 10, 0.6); border: 1px solid rgba(255, 68, 102, 0.35); border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #ff6b8b; font-weight: 700;">
+                  <input type="checkbox" id="chkHorrorEnabled" style="width: 18px; height: 18px; accent-color: #ff3366;" />
+                  <span>🧟 Activar Perfil de Terror / Juegos de Terror</span>
+                </label>
+                <div style="display: flex; align-items: center; gap: 8px; flex: 1; max-width: 450px;">
+                  <label for="selectHorrorType" style="color: #ffb3c1; font-size: 0.85rem; white-space: nowrap;">Subtipo de Terror:</label>
+                  <select id="selectHorrorType" class="form-control" style="border-color: rgba(255, 68, 102, 0.4); color: #fff; background: rgba(20, 5, 5, 0.85);">
+                    <option value="abandonado">🏚️ Edificio Abandonado (Deterioro General)</option>
+                    <option value="escuela_abandonada">🏫 Escuela Abandonada (Pizarras rotas, pupitres volcados)</option>
+                    <option value="hospital_destruido">🏥 Hospital Destruido (Camillas caídas, manchas biológicas)</option>
+                    <option value="iglesia_oscura">⛪ Iglesia Oscura / Profanada (Bancos volcados, penumbra)</option>
+                    <option value="comisaria_deteriorada">👮 Comisaría Deteriorada (Celdas forzadas, archivos dispersos)</option>
+                    <option value="casa_infectada">☣️ Casa Infectada (Humedad extrema, moho invasivo)</option>
+                    <option value="edificio_incendiado">🔥 Edificio Incendiado (Vigas calcinadas, hollín)</option>
+                    <option value="derrumbado">💥 Construcción Parcialmente Derrumbada (Escombros en suelo)</option>
+                  </select>
+                </div>
+              </div>
+              <p style="margin: 6px 0 0 0; font-size: 0.8rem; color: #ffa3b1;">
+                Incluye ventanas tapiadas con maderas cruzadas, vidrios rotos, escombros, grietas en muros, manchas de humedad/moho e iluminación titilante tenue.
+              </p>
+            </div>
+
+            <!-- 4. MATERIALES Y TEXTURAS PBR REALES -->
+            <div style="margin-top: 12px; padding: 12px; background: rgba(0, 15, 25, 0.6); border: 1px solid rgba(0, 200, 255, 0.3); border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <strong style="color: #00e5ff;">🎨 Sistema de Materiales PBR Reales:</strong>
+                  <span id="matInspectionSummary" style="font-size: 0.8rem; color: #a0aec0;">Texturas PBR automáticas activadas (BaseColor, Normal, Roughness, Metal, AO).</span>
+                </div>
+                <button type="button" class="btn btn-secondary" id="btnInspectUeMaterials" style="border-color: #00e5ff; color: #00e5ff; font-size: 0.8rem; padding: 4px 10px;">
+                  🔍 Inspeccionar Assets del Proyecto (Megascans / Texturas)
+                </button>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 8px;">
+                <div>
+                  <label style="font-size: 0.8rem; color: #a3ffc7;">🧱 Paredes Exteriores:</label>
+                  <select id="selectArchWallMat" class="form-control" style="font-size: 0.85rem;">
+                    <option value="auto">🎲 Automático</option>
+                    <option value="ladrillo">Ladrillo Clásico</option>
+                    <option value="hormigon">Hormigón Encofrado</option>
+                    <option value="piedra">Piedra / Mampostería</option>
+                    <option value="madera">Madera / Tablones</option>
+                    <option value="yeso">Yeso / Revoque Blanco</option>
+                    <option value="chapa">Chapa Metálica</option>
+                    <option value="pintura_desgastada">Pintura Desgastada</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 0.8rem; color: #a3ffc7;">🪵 Suelos / Losas:</label>
+                  <select id="selectArchFloorMat" class="form-control" style="font-size: 0.85rem;">
+                    <option value="auto">🎲 Automático</option>
+                    <option value="madera">Madera Parquet</option>
+                    <option value="cemento">Cemento Pulido</option>
+                    <option value="ceramica">Cerámica / Baldosas</option>
+                    <option value="marmol">Mármol Pulido</option>
+                    <option value="asfalto">Asfalto / Pista</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 0.8rem; color: #a3ffc7;">🏠 Techos / Cubiertas:</label>
+                  <select id="selectArchRoofMat" class="form-control" style="font-size: 0.85rem;">
+                    <option value="auto">🎲 Automático</option>
+                    <option value="teja">Teja Terracota</option>
+                    <option value="chapa">Chapa Acanalada</option>
+                    <option value="pizarra">Pizarra Negra</option>
+                    <option value="hormigon">Losa de Hormigón</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. LOS 9 BOTONES REQUERIDOS POR EL USUARIO -->
+            <div style="margin-top: 14px;">
+              <strong style="color: #00ff44; display: block; margin-bottom: 8px;">⚡ Controles de Generación & Aleatorización:</strong>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px;">
+                <!-- Boton 1: GENERATE BUILDING -->
+                <button type="button" class="btn btn-primary" id="btnArchGenerateBuilding" style="font-weight: 800; background: #00ff44; color: #070c0a;">
+                  🏗️ GENERATE BUILDING
+                </button>
+                <!-- Boton 2: GENERATE NEW VARIANT -->
+                <button type="button" class="btn btn-secondary" id="btnArchNewVariant" style="font-weight: 700; border-color: #00ff44; color: #00ff44;">
+                  ✨ GENERATE NEW VARIANT
+                </button>
+                <!-- Boton 3: RANDOMIZE ARCHITECTURE -->
+                <button type="button" class="btn btn-secondary" id="btnArchRandomizeArch">
+                  🎲 RANDOMIZE ARCHITECTURE
+                </button>
+                <!-- Boton 4: RANDOMIZE MATERIALS -->
+                <button type="button" class="btn btn-secondary" id="btnArchRandomizeMaterials">
+                  🎨 RANDOMIZE MATERIALS
+                </button>
+                <!-- Boton 5: RANDOMIZE INTERIOR -->
+                <button type="button" class="btn btn-secondary" id="btnArchRandomizeInterior">
+                  🛋️ RANDOMIZE INTERIOR
+                </button>
+                <!-- Boton 6: REGENERATE ROOF -->
+                <button type="button" class="btn btn-secondary" id="btnArchRegenRoof" title="Regenera solamente el techo conservando la fachada y el interior">
+                  🏠 REGENERATE ROOF
+                </button>
+                <!-- Boton 7: REGENERATE FACADE -->
+                <button type="button" class="btn btn-secondary" id="btnArchRegenFacade" title="Regenera solamente la fachada conservando el interior">
+                  🏛️ REGENERATE FACADE
+                </button>
+                <!-- Boton 8: REGENERATE STRUCTURE -->
+                <button type="button" class="btn btn-secondary" id="btnArchRegenStructure" title="Regenera solamente la estructura y alas">
+                  📐 REGENERATE STRUCTURE
+                </button>
+                <!-- Boton 9: RESET VARIATION -->
+                <button type="button" class="btn btn-secondary" id="btnArchResetVariation" style="color: #ff9999; border-color: rgba(255,100,100,0.3);">
+                  🔄 RESET VARIATION
+                </button>
+              </div>
+            </div>
+
+            <!-- 6. PREVISUALIZADOR 3D INTERACTIVO (WEBGL / THREE.JS) -->
+            <div style="margin-top: 16px; border: 1px solid #00ff44; border-radius: 10px; overflow: hidden; background: #050b08;">
+              <div style="background: rgba(0, 255, 68, 0.1); padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0, 255, 68, 0.2);">
+                <span style="font-weight: 700; color: #00ff44; font-size: 0.9rem;">👁️ Previsualización 3D Interactiva en Tiempo Real</span>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" class="btn btn-secondary" id="btn3DRotate" style="padding: 2px 8px; font-size: 0.75rem;">🔄 Giro Auto</button>
+                  <button type="button" class="btn btn-secondary" id="btn3DResetCam" style="padding: 2px 8px; font-size: 0.75rem;">🎯 Centrar</button>
+                  <button type="button" class="btn btn-secondary" id="btn3DWireframe" style="padding: 2px 8px; font-size: 0.75rem;">🕸️ Malla</button>
+                  <button type="button" class="btn btn-secondary" id="btn3DClay" style="padding: 2px 8px; font-size: 0.75rem;">⚪ Arcilla</button>
+                </div>
+              </div>
+
+              <!-- Lienzo 3D Three.js -->
+              <div style="position: relative; width: 100%; height: 290px; background: radial-gradient(circle at center, #0a1f14 0%, #030805 100%);">
+                <canvas id="arch3DCanvas" style="width: 100%; height: 100%; display: block;"></canvas>
+                <div id="arch3DStatsOverlay" style="position: absolute; bottom: 8px; left: 10px; font-family: monospace; font-size: 0.75rem; color: #00ff44; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 4px; pointer-events: none;">
+                  Dim: 18x12m | Pisos: 2 | Alas: 1 | Semilla: 1001
+                </div>
+                <div style="position: absolute; top: 8px; right: 10px; font-size: 0.75rem; color: #88ffbb; background: rgba(0,0,0,0.6); padding: 3px 6px; border-radius: 4px; pointer-events: none;">
+                  🖱️ Arrastra para rotar | Rueda para zoom
+                </div>
+              </div>
+
+              <!-- Acciones de Nivel & Guardado -->
+              <div style="padding: 10px 14px; background: rgba(0, 20, 10, 0.85); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid rgba(0, 255, 68, 0.2);">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-secondary" id="btnArchBakeStaticMesh" title="Convierte la malla a StaticMesh .uasset reutilizable en /Game/ZIRO/GeneratedBuildings/">
+                    💾 Hornear a StaticMesh Asset (/Game/ZIRO/...)
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="btnArchOpenStudioWindow" title="Abre el estudio 3D completo dentro del editor de Unreal Engine">
+                    🖥️ Abrir Ventana 3D Studio en Unreal
+                  </button>
+                </div>
+                <button type="button" class="btn btn-primary" id="btnArchPlaceInLevel" style="font-weight: 800; background: #00ff44; color: #070c0a;">
+                  🚀 Colocar en Escenario de Nivel Abierto
+                </button>
+              </div>
+            </div>
+
+            <div id="archActionResult" style="margin-top: 12px; padding: 10px 14px; background: rgba(0, 255, 68, 0.05); border: 1px solid rgba(0, 255, 68, 0.2); border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #00ff44; display: none;"></div>
+          </div>
+
+          <!-- Subir Plano 2D o Diseño 3D & Replicar en Tiempo Real -->
+          <div class="card neon-card" id="cardBlueprintReplication">
+            <div class="card-header">
+              <h2>📐 Subir Plano 2D o Diseño 3D & Replicar en Unreal Engine</h2>
+              <span class="badge">IA VISIÓN ARQUITECTÓNICA</span>
+            </div>
+            <p class="card-desc">
+              Sube una imagen de plano 2D, corte isométrico 3D de habitación o boceto de campus (como tus imágenes de referencia). Ziro analizará los ambientes, verificará los assets en el nivel, aplicará texturas PBR (paredes, pisos de madera/cerámica, techos) y te avisará si falta algún asset:
+            </p>
+
+            <div class="blueprint-upload-area" id="blueprintDropzone" style="border: 2px dashed rgba(0, 255, 68, 0.4); border-radius: 12px; padding: 25px; text-align: center; background: rgba(0, 255, 68, 0.03); cursor: pointer; transition: all 0.3s ease;">
+              <input type="file" id="inputBlueprintFile" accept="image/*" style="display: none;" />
+              <div style="font-size: 32px; margin-bottom: 8px;">📑</div>
+              <strong style="color: #00ff44; font-size: 1.05rem;">Haz clic o arrastra aquí tu plano 2D o diseño 3D</strong>
+              <p style="color: #a0aec0; font-size: 0.85rem; margin-top: 4px;">Soporta PNG, JPG, WEBP de planos arquitectónicos o renders 3D</p>
+            </div>
+
+            <div id="blueprintAnalysisBox" style="display: none; margin-top: 15px; padding: 15px; background: rgba(5, 20, 12, 0.8); border: 1px solid #00ff44; border-radius: 10px;">
+              <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                <img id="blueprintThumbImg" src="" style="width: 140px; height: 140px; object-fit: cover; border-radius: 8px; border: 1px solid #00ff44;" />
+                <div style="flex: 1; min-width: 250px;">
+                  <h3 id="blueprintDetectedType" style="color: #00ff44; margin: 0 0 6px 0;">Tipología Detectada: Universidad / Campus</h3>
+                  <p id="blueprintSummaryText" style="color: #e2e8f0; font-size: 0.9rem; margin-bottom: 8px;"></p>
+                  <div id="blueprintMaterialBadges" style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;"></div>
+                  <div id="blueprintAssetAlert" style="padding: 8px 12px; background: rgba(255, 187, 0, 0.1); border: 1px solid #ffbb00; border-radius: 6px; color: #ffbb00; font-size: 0.85rem; margin-bottom: 10px;"></div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                <button class="btn btn-primary" id="btnReplicateBlueprint">🚀 Replicar Diseño en Unreal Engine</button>
+                <button class="btn btn-fluor" id="btnRandomizeInterior" style="background: rgba(0, 255, 68, 0.2); border: 1px solid #00ff44; color: #00ff44; font-weight: 700;">🎲 Interior Aleatorio (Ver Cambio en Vivo)</button>
+              </div>
+              <div id="blueprintReplicateResult" style="margin-top: 10px; font-family: monospace; font-size: 0.85rem; color: #00ff44; display: none;"></div>
+            </div>
+          </div>
+
+          <!-- Quick Test Actions -->
+          <div class="card">
+            <div class="card-header">
+              <h2>⚡ Herramientas en Vivo de ZIROAI.uplugin en tu Nivel Abierto</h2>
+              <span class="badge">TIEMPO REAL</span>
+            </div>
+            <p class="card-desc">Ejecuta herramientas nativas C++ de <code>ZIROAI.uplugin</code> directamente frente a tu cámara en el nivel abierto:</p>
+            <div class="action-buttons-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 10px;">
+              <button class="btn btn-secondary" id="btnUeBuildHouse">🏠 Construir Casa</button>
+              <button class="btn btn-secondary" id="btnUeBuildBuilding">🏢 Crear Edificio 5 Pisos</button>
+              <button class="btn btn-secondary" id="btnUeBuildCity">🌆 Construir Ciudad</button>
+              <button class="btn btn-secondary" id="btnUeBuildForest">🌲 Generar Bosque PCG</button>
+              <button class="btn btn-secondary" id="btnUeSpawnCube">🧊 Crear Cubo</button>
+              <button class="btn btn-secondary" id="btnUeSpawnSphere">⚽ Crear Esfera</button>
+              <button class="btn btn-secondary" id="btnUeSpawnLight">🌅 Iluminación Atardecer</button>
+              <button class="btn btn-secondary" id="btnUeBuildWall">🧱 Construir Muro</button>
+              <button class="btn btn-secondary" id="btnUePlaySim">▶️ Play In Editor</button>
+              <button class="btn btn-secondary" id="btnUeStopSim">⏹️ Detener Simulación</button>
+              <button class="btn btn-secondary" id="btnUeDeleteLast">🗑️ Borrar Último Actor</button>
+            </div>
+            <div id="ueActionResult" style="margin-top: 15px; padding: 10px 14px; background: rgba(0, 255, 68, 0.05); border: 1px solid rgba(0, 255, 68, 0.2); border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #00ff44; display: none;">
+            </div>
+          </div>
+
+          <!-- NUEVA SOLAPA: MEJORAS PROPUESTAS, ESCÁNER DE ASSETS & CIUDADES/ENTORNOS POR PROMPT -->
+          <div class="card neon-card" id="cardUeWorldAndAssets" style="border: 2px solid #00ddff; margin-top: 16px;">
+            <div class="card-header" style="border-bottom: 1px solid rgba(0, 221, 255, 0.25); padding-bottom: 10px;">
+              <div>
+                <h2 style="color: #00ddff; margin: 0;">🌍 Ciudades, Entornos, Mejoras &amp; Escáner de Assets</h2>
+                <span style="font-size: 0.82rem; color: #a0e8ff;">Escanea el proyecto abierto en Unreal, tilda qué assets usar y genera ciudades o islas por prompt.</span>
+              </div>
+              <span class="badge" style="background: #00ddff; color: #050a0d; font-weight: 800;">ASSET SCANNER + WORLD</span>
+            </div>
+
+            <!-- Sub-solapas internas -->
+            <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary world-subtab-btn" data-subtab="subtab-scanner" style="background: #00ddff; color: #050a0d; font-weight: 700;">🔍 1. Escáner de Assets del Proyecto</button>
+              <button type="button" class="btn btn-secondary world-subtab-btn" data-subtab="subtab-improvements">💡 2. Propuestas de Mejoras</button>
+              <button type="button" class="btn btn-secondary world-subtab-btn" data-subtab="subtab-worldgen">🏙️ 3. Construir Ciudad / Isla por Prompt</button>
+            </div>
+
+            <!-- SUB-SOLAPA 1: ESCÁNER DE ASSETS DEL PROYECTO -->
+            <div id="subtab-scanner" class="world-subtab-pane" style="margin-top: 14px;">
+              <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
+                <button type="button" class="btn btn-primary" id="btnScanProjectAssets" style="background: #00ff44; color: #070c0a; font-weight: 800;">🔄 Escanear Proyecto Abierto en Unreal</button>
+                <input type="text" id="assetScanFilter" placeholder="Filtrar assets por nombre o categoría..." style="flex: 1; min-width: 180px; padding: 7px 10px; border-radius: 6px; background: #07100c; color: #fff; border: 1px solid rgba(0,255,68,0.35);">
+                <button type="button" class="btn btn-secondary" id="btnSelectAllAssets" style="font-size: 0.78rem;">☑️ Tildar Todos</button>
+                <button type="button" class="btn btn-secondary" id="btnSelectVegAssets" style="font-size: 0.78rem;">🌿 Solo Plantas</button>
+                <button type="button" class="btn btn-secondary" id="btnClearAssets" style="font-size: 0.78rem;">⬜ Limpiar</button>
+              </div>
+              <div id="assetScanSummary" style="font-size: 0.82rem; color: #88ffaa; margin-bottom: 8px;">Presioná "Escanear Proyecto Abierto en Unreal" para listar todos los StaticMeshes y Materiales utilizables.</div>
+              <div id="assetScanList" style="max-height: 240px; overflow-y: auto; border: 1px solid rgba(0,255,68,0.25); border-radius: 8px; padding: 8px; background: rgba(4, 10, 7, 0.85); display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 6px;">
+              </div>
+            </div>
+
+            <!-- SUB-SOLAPA 2: PROPUESTAS DE MEJORAS (EDIFICIOS Y ENTORNOS) -->
+            <div id="subtab-improvements" class="world-subtab-pane" style="margin-top: 14px; display: none;">
+              <p style="font-size: 0.85rem; color: #cdeee0; margin-bottom: 10px;">Tildá las mejoras propuestas para aplicarlas automáticamente en tus construcciones y entornos:</p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px;">
+                <div style="background: rgba(0,255,68,0.06); border: 1px solid rgba(0,255,68,0.25); border-radius: 8px; padding: 10px;">
+                  <div style="font-weight: 800; color: #00ff44; margin-bottom: 6px;">🏛️ Mejoras para Edificios</div>
+                  <label style="display: block; margin-bottom: 5px; font-size: 0.83rem;"><input type="checkbox" class="ziro-enhance-cb" value="puertas_abiertas" checked> 🚪 Puertas abiertas para ingresar al interior</label>
+                  <label style="display: block; margin-bottom: 5px; font-size: 0.83rem;"><input type="checkbox" class="ziro-enhance-cb" value="objetos_movibles" checked> 🪑 Puertas y muebles movibles/rotables (no mesh único)</label>
+                  <label style="display: block; margin-bottom: 5px; font-size: 0.83rem;"><input type="checkbox" class="ziro-enhance-cb" value="enredaderas_paredes" checked> 🌿 Enredaderas y plantas trepadoras en paredes</label>
+                  <label style="display: block; font-size: 0.83rem;"><input type="checkbox" class="ziro-enhance-cb" value="usar_materiales_nivel" checked> 🎨 Priorizar materiales/assets incluidos del nivel</label>
+                </div>
+                <div style="background: rgba(0,221,255,0.06); border: 1px solid rgba(0,221,255,0.25); border-radius: 8px; padding: 10px;">
+                  <div style="font-weight: 800; color: #00ddff; margin-bottom: 6px;">🌎 Mejoras para Entornos y Ciudades</div>
+                  <label style="display: block; margin-bottom: 5px; font-size: 0.83rem;"><input type="checkbox" class="ziro-enhance-cb" value="trazado_urbano" checked> 🏙️ Trazado urbano con grilla de manzanas y calles</label>
+                  <label style="display: block; margin-bottom: 5px; font-size: 0.83rem;"><input type="checkbox" class="ziro-enhance-cb" value="terreno_isla"> 🏝️ Base de isla rodeada de océano</label>
+                  <label style="display: block; margin-bottom: 5px; font-size: 0.83rem;"><input type="checkbox" class="ziro-enhance-cb" value="ambiente_abandonado"> 🏚️ Deterioro abandonado y vidrios rotos</label>
+                  <label style="display: block; font-size: 0.83rem;"><input type="checkbox" class="ziro-enhance-cb" value="usar_assets_tildados" checked> 📦 Distribuir assets tildados del escáner en la escena</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUB-SOLAPA 3: CONSTRUCTOR DE CIUDAD / ISLA POR PROMPT -->
+            <div id="subtab-worldgen" class="world-subtab-pane" style="margin-top: 14px; display: none;">
+              <textarea id="worldPromptInput" rows="2" placeholder="Ej: Construí una isla abandonada con 8 edificios, puertas abiertas, muchas enredaderas en las paredes usando los assets tildados..." style="width: 100%; padding: 9px; border-radius: 8px; background: #07100c; color: #fff; border: 1px solid rgba(0,221,255,0.4); font-size: 0.88rem; margin-bottom: 10px;"></textarea>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 10px;">
+                <label style="font-size: 0.82rem;">Tipo:
+                  <select id="worldModeSelect" style="padding: 5px 8px; border-radius: 6px; background: #07100c; color: #fff; border: 1px solid #00ddff;">
+                    <option value="city">🏙️ Ciudad</option>
+                    <option value="island">🏝️ Isla</option>
+                  </select>
+                </label>
+                <label style="font-size: 0.82rem;">Edificios:
+                  <input type="number" id="worldBuildingCount" value="6" min="1" max="30" style="width: 65px; padding: 5px; border-radius: 6px; background: #07100c; color: #fff; border: 1px solid #00ddff;">
+                </label>
+                <label style="font-size: 0.82rem;"><input type="checkbox" id="worldAbandonedCb"> 🏚️ Abandonada</label>
+                <label style="font-size: 0.82rem;"><input type="checkbox" id="worldExtraVinesCb" checked> 🌿 Más Plantas / Enredaderas</label>
+                <button type="button" class="btn btn-primary" id="btnBuildWorldPrompt" style="margin-left: auto; background: #00ddff; color: #050a0d; font-weight: 800;">🚀 Construir Entorno en Unreal</button>
+              </div>
+              <div id="worldBuildStatus" style="font-size: 0.82rem; color: #00ff44; font-family: monospace; display: none;"></div>
+            </div>
+          </div>
+
+          <!-- Voice Commands Cheatsheet for Unreal -->
+          <div class="card">
+            <div class="card-header">
+              <h2>🎙️ Guía de Comandos de Voz para Unreal Engine</h2>
+              <span class="badge">HABLA CON TU MASCOTA</span>
+            </div>
+            <p class="card-desc">Dile a tu mascota virtual cualquiera de estos comandos en tiempo real:</p>
+
+            <div class="table-responsive" style="margin-top: 10px;">
+              <table class="commands-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="border-bottom: 1px solid #1a2e22; text-align: left; color: #00ff44; font-size: 0.85rem;">
+                    <th style="padding: 8px;">Lo que dices por voz</th>
+                    <th style="padding: 8px;">Acción en tu proyecto</th>
+                  </tr>
+                </thead>
+                <tbody style="font-size: 0.9rem; color: #e2e8f0;">
+                  <tr style="border-bottom: 1px solid #112217;">
+                    <td style="padding: 8px;"><code>"crea un cubo"</code> o <code>"agrega un cubo rojo"</code></td>
+                    <td style="padding: 8px;">Spawnea un cubo en el nivel con el color indicado.</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #112217;">
+                    <td style="padding: 8px;"><code>"crea una esfera con físicas"</code></td>
+                    <td style="padding: 8px;">Crea una esfera con masa, gravedad y rebotes físicos.</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #112217;">
+                    <td style="padding: 8px;"><code>"crea un cilindro"</code> / <code>"crea un cono"</code></td>
+                    <td style="padding: 8px;">Inserta la forma geométrica en la escena.</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #112217;">
+                    <td style="padding: 8px;"><code>"agrega una luz puntual"</code> / <code>"luz solar"</code></td>
+                    <td style="padding: 8px;">Ilumina tu nivel con luces puntuales o direccionales.</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #112217;">
+                    <td style="padding: 8px;"><code>"construye un muro"</code> / <code>"crea una pirámide"</code></td>
+                    <td style="padding: 8px;">Construcción procedural de bloques en tiempo real.</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #112217;">
+                    <td style="padding: 8px;"><code>"haz una fila de dominós"</code></td>
+                    <td style="padding: 8px;">Coloca fichas de dominó con física para colisiones en cadena.</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #112217;">
+                    <td style="padding: 8px;"><code>"mueve el cubo arriba"</code> / <code>"agranda el cubo"</code></td>
+                    <td style="padding: 8px;">Transforma posición y escala del objeto seleccionado.</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #112217;">
+                    <td style="padding: 8px;"><code>"dale play al juego"</code> / <code>"detén el juego"</code></td>
+                    <td style="padding: 8px;">Inicia o para la simulación PIE del editor.</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #112217;">
+                    <td style="padding: 8px;"><code>"guarda el nivel"</code> / <code>"cuántos objetos hay"</code></td>
+                    <td style="padding: 8px;">Guarda el proyecto y hace recuento de actores en escena.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 7: ZIRO PROCEDURAL FRAMEWORK (IMAGEN 3)
+             ========================================== -->
+        <section class="tab-pane" id="tab-procedural">
+          <div class="pf-workspace">
+            <!-- Columna Izquierda (Imagen 2): Voz + Comandos + Ziro Control de Proyectos + Mapas -->
+            <div class="pf-left-col">
+              <div class="pf-panel">
+                <div class="pf-panel-title">
+                  <span>🎙️ ZIRO VOICE — ASISTENTE UE</span>
+                  <div style="display:flex; gap:6px; align-items:center;">
+                    <span style="font-size:10px; color:var(--ziro-indicator);">● LIVE</span>
+                    <button type="button" class="btn btn-secondary" id="btnPfPopout" style="padding:2px 6px; font-size:10px;" title="Abrir en nueva ventana aparte">🗗</button>
+                  </div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+                  <img id="pfMascotMini" src="../assets/default_pets/ziro_piggy.png" style="width:50px; height:50px; object-fit:contain; border-radius:50%; border:2px solid var(--ziro-primary); box-shadow:0 0 12px var(--ziro-glow); padding:2px;" />
+                  <div style="font-size:11.5px; background:rgba(0,0,0,0.45); border:1px solid var(--ziro-border); border-radius:8px; padding:6px 9px; flex:1;">
+                    <div>Proyecto: <strong id="pfVoiceProj" style="color:var(--ziro-primary);">Ninguno</strong></div>
+                    <div>Mapa: <strong id="pfVoiceMap" style="color:var(--ziro-secondary);">-</strong></div>
+                    <div id="pfVoiceStatus" style="color:var(--ziro-indicator); font-size:11px; font-weight:700;">Listo para comandos...</div>
+                  </div>
+                </div>
+                <div style="font-size:11px; font-weight:700; color:var(--color-text-muted); margin-bottom:4px;">COMANDOS POR VOZ (EJEMPLOS):</div>
+                <div id="pfVoiceExamples" style="display:flex; flex-direction:column; gap:4px; font-size:11px;">
+                  <label class="pf-voice-cmd" data-cmd="Generá 5 escuelas, 2 hospitales y 3 comisarías"><input type="checkbox" checked> "ZIRO, creá 5 escuelas y 2 hospitales"</label>
+                  <label class="pf-voice-cmd" data-cmd="Cargá el mapa principal"><input type="checkbox" checked> "Cargá el mapa seleccionado"</label>
+                  <label class="pf-voice-cmd" data-cmd="Generá una ciudad 10x10 abandonada"><input type="checkbox" checked> "Generá una ciudad 10x10"</label>
+                  <label class="pf-voice-cmd" data-cmd="Agregá un hospital cerca"><input type="checkbox"> "Agregá un hospital cerca"</label>
+                  <label class="pf-voice-cmd" data-cmd="Construí un barrio industrial con enredaderas y musgo"><input type="checkbox"> "Construí un barrio industrial"</label>
+                  <label class="pf-voice-cmd" data-cmd="Optimizá el proyecto preservando puertas y colisiones"><input type="checkbox"> "Optimizá el proyecto"</label>
+                </div>
+              </div>
+
+              <!-- ZIRO PROJECT MANAGER (NUNCA USA ZIRO HOST COMO DESTINO AUTOMÁTICO) -->
+              <div class="pf-panel">
+                <div class="pf-panel-title">
+                  <span>📁 ZIRO — CONTROL DE PROYECTOS</span>
+                  <button type="button" class="btn btn-secondary" id="btnPmScanRoots" style="padding:2px 8px; font-size:10px;">🔄 Escanear</button>
+                </div>
+                <div style="display:flex; gap:5px; margin-bottom:6px;">
+                  <input type="text" id="pmRootFolderInput" class="form-control" value="E:\Proyecto Unreal" placeholder="Ubicación raíz ej: E:\Proyecto Unreal o F:\Proyecto Unreal" style="font-size:11px; padding:5px 7px;" />
+                  <button type="button" class="btn btn-secondary" id="btnPmBrowseRoot" style="padding:4px 8px; font-size:11px;">📂</button>
+                </div>
+                <div id="pmProjectsList" style="max-height:135px; overflow-y:auto; display:flex; flex-direction:column; gap:4px; margin-bottom:6px;"></div>
+                <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                  <button type="button" class="btn btn-primary" id="btnPmOpenActive" style="padding:4px 8px; font-size:10.5px;">🚀 Abrir Proyecto</button>
+                  <button type="button" class="btn btn-secondary" id="btnPmOpenFolder" style="padding:4px 8px; font-size:10.5px;">📁 Abrir Carpeta</button>
+                </div>
+              </div>
+
+              <!-- MAPAS DEL PROYECTO -->
+              <div class="pf-panel">
+                <div class="pf-panel-title">
+                  <span>🗺️ MAPAS DEL PROYECTO</span>
+                  <span id="pfMapsCount" style="font-size:10px;">0</span>
+                </div>
+                <div id="pfMapsList" style="max-height:110px; overflow-y:auto; display:flex; flex-direction:column; gap:4px; font-size:11.5px;">
+                  <div style="color:var(--color-text-dim);">Escanea o selecciona un proyecto para ver sus mapas .umap</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Centro/Derecha (Imagen 2): Visor Principal 3D Procedural + Comparación + Componentes Modulares -->
+            <div class="pf-viewport-card">
+              <div class="pf-ue-toolbar">
+                <div>
+                  <strong style="color:#fff;">Vista 3D Modular &amp; Ciudad Procedural</strong>
+                  <span style="margin-left:10px; color:var(--color-text-muted); font-size:11px;">Destino: <code id="pfHeaderTargetPath" style="color:var(--ziro-primary);">Selecciona tu .uproject</code></span>
+                </div>
+                <div style="display:flex; gap:5px; align-items:center; flex-wrap:wrap;">
+                  <button type="button" class="btn btn-secondary" id="btnPfFirstPerson" style="padding:4px 8px; font-size:10.5px;" title="WASD para caminar">🚶 1ª Persona</button>
+                  <button type="button" class="btn btn-secondary" id="btnPfTestDoors" style="padding:4px 8px; font-size:10.5px;">🚪 Probar Puertas</button>
+                  <button type="button" class="btn btn-secondary" id="btnPfBreakWindow" style="padding:4px 8px; font-size:10.5px;">🪟 Romper Ventana</button>
+                  <button type="button" class="btn btn-secondary" id="btnPfCompareBeforeAfter" style="padding:4px 8px; font-size:10.5px;">🌓 Antes / Después</button>
+                  <button type="button" class="btn btn-secondary" id="btnPfDeleteComp" style="padding:4px 8px; font-size:10.5px; color:#ff6b7a;" title="Eliminar edificio/componente seleccionado en 3D">🗑️ Quitar Pieza</button>
+                  <button type="button" class="btn btn-secondary" id="btnPfReplaceComp" style="padding:4px 8px; font-size:10.5px;" title="Reemplazar/Variar pieza seleccionada">🔄 Reemplazar Pieza</button>
+                </div>
+              </div>
+
+              <div class="pf-viewport-stage">
+                <canvas id="pf3dCanvas" style="width:100%; height:100%; display:block; min-height:360px;"></canvas>
+                <div class="pf-compare-overlay">
+                  <div class="pf-compare-badge">
+                    <div style="font-weight:800; color:var(--ziro-secondary); margin-bottom:2px;">BASE (PACK FAB)</div>
+                    <div id="pfBaseCompareText" style="color:#b7d1c5;">Módulos separados: Paredes, Pisos, Puertas, Ventanas, Escaleras, Barandas, Muebles.</div>
+                  </div>
+                  <div style="text-align:center; font-size:16px; color:var(--ziro-primary); text-shadow:0 0 8px var(--ziro-glow);">⬇</div>
+                  <div class="pf-compare-badge" style="border-color:var(--ziro-primary);">
+                    <div style="font-weight:800; color:var(--ziro-primary); margin-bottom:2px;">GENERADO POR ZIRO</div>
+                    <div id="pfGeneratedCompareText" style="color:#fff;">Clic en cualquier bloque 3D para seleccionar/editar. No inserta en Unreal hasta confirmar.</div>
+                  </div>
+                </div>
+                <!-- Etiquetas HUD sobre el mapa 3D (estilo Imagen 2) -->
+                <div id="pfViewportTags" class="pf-viewport-tags">
+                  <span class="pf-tag-pin">FÁBRICA (MODULAR)</span>
+                  <span class="pf-tag-pin">DEPÓSITOS (GENERADO)</span>
+                  <span class="pf-tag-pin">HOSPITAL (GENERADO)</span>
+                  <span class="pf-tag-pin">CALLES (GENERADAS)</span>
+                  <span class="pf-tag-pin">BARRIO INDUSTRIAL</span>
+                </div>
+                <div id="pfSelectedCompHud" style="position:absolute; bottom:10px; left:12px; font-size:11px; background:rgba(0,0,0,0.72); border:1px solid var(--ziro-border); border-radius:6px; padding:5px 9px; color:#d8ffe9; z-index:4;">
+                  Componente activo: <strong id="pfSelectedCompName">Ninguno (clic en la escena 3D)</strong>
+                </div>
+              </div>
+
+              <!-- Controles Modulares, Naturaleza Detallada y Deterioro -->
+              <div style="padding:10px 14px; background:rgba(8,13,19,0.95); border-top:1px solid var(--ziro-border); display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; font-size:11.5px;">
+                <div>
+                  <div style="font-weight:700; color:var(--ziro-primary); margin-bottom:4px;">🧩 Módulos &amp; Puertas Interactivas</div>
+                  <label style="display:block;"><input type="checkbox" id="pfModSeparateMeshes" checked> Módulos separados (sin malla monolítica)</label>
+                  <label style="display:block;"><input type="checkbox" id="pfModBreakableWindows" checked> Ventanas rompibles + físicas + colisiones</label>
+                  <select id="pfDoorModeSelect" class="form-control" style="margin-top:4px; font-size:11px; padding:4px;">
+                    <option value="open">🚪 Puertas abiertas (entrada libre)</option>
+                    <option value="closed">🚪 Puertas cerradas (abribles en Play)</option>
+                    <option value="locked_key">🔑 Puertas bloqueadas / Con llave</option>
+                    <option value="breachable">💥 Puertas forzables / Destructibles</option>
+                    <option value="automatic">⚡ Puertas automáticas</option>
+                  </select>
+                </div>
+                <div>
+                  <div style="font-weight:700; color:#39ff14; margin-bottom:4px;">🌿 Naturaleza (Interior / Exterior + Anti-Clipping)</div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                    <div>Pasto (<span id="lblPfGrass">60%</span>)<input type="range" id="pfGrassDensity" min="0" max="100" value="60" style="width:100%;"></div>
+                    <div>Árboles/Enredaderas (<span id="lblPfTrees">65%</span>)<input type="range" id="pfTreesDensity" min="0" max="100" value="65" style="width:100%;"></div>
+                  </div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                    <div>Flores/Musgo/Raíces (<span id="lblPfMoss">45%</span>)<input type="range" id="pfMossDensity" min="0" max="100" value="45" style="width:100%;"></div>
+                    <div>Altura pasto (<span id="lblPfGrassHeight">40%</span>)<input type="range" id="pfGrassHeight" min="10" max="100" value="40" style="width:100%;"></div>
+                  </div>
+                  <label style="display:inline-block; margin-right:8px;"><input type="checkbox" id="pfVegInterior" checked> Veg. interior</label>
+                  <label style="display:inline-block;"><input type="checkbox" id="pfNoVegDoorClip" checked> Bloquear cruce puertas/ventanas</label>
+                </div>
+                <div>
+                  <div style="font-weight:700; color:#ff9944; margin-bottom:4px;">🏚️ Abandono &amp; Antigüedad (1, 5, 15, 30, 50 años)</div>
+                  <div style="display:flex; gap:4px; margin-bottom:5px;">
+                    <button type="button" class="pf-size-pill pf-age-btn" data-age="1">1a</button>
+                    <button type="button" class="pf-size-pill pf-age-btn" data-age="5">5a</button>
+                    <button type="button" class="pf-size-pill pf-age-btn active" data-age="15">15a</button>
+                    <button type="button" class="pf-size-pill pf-age-btn" data-age="30">30a</button>
+                    <button type="button" class="pf-size-pill pf-age-btn" data-age="50">50a</button>
+                  </div>
+                  <div>Suciedad / Óxido / Grietas / Humedad (<span id="lblPfWear">50%</span>)<input type="range" id="pfWearSlider" min="0" max="100" value="50" style="width:100%;"></div>
+                  <label style="display:inline-block;"><input type="checkbox" id="pfDebrisEnabled" checked> Escombros + Vidrios rotos + Iluminación deterioro</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Barra Inferior (Imagen 2: PCG + Optimización + Estado) -->
+            <div class="pf-bottom-dock">
+              <div class="pf-panel">
+                <div class="pf-panel-title">
+                  <span>⚙️ GENERACIÓN PROCEDURAL (PCG)</span>
+                  <span style="font-size:10px; color:var(--ziro-secondary);">CONFIRMA ANTES DE INSERTAR EN UE 5.8</span>
+                </div>
+                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                  <div>
+                    <div style="font-size:11px; color:var(--color-text-muted);">Tamaño de ciudad:</div>
+                    <div class="pf-size-pills">
+                      <button type="button" class="pf-size-pill" data-size="2x2">2×2</button>
+                      <button type="button" class="pf-size-pill" data-size="4x4">4×4</button>
+                      <button type="button" class="pf-size-pill active" data-size="10x10">10×10</button>
+                      <button type="button" class="pf-size-pill" data-size="20x20">20×20 km</button>
+                    </div>
+                  </div>
+                  <div style="flex:1; min-width:130px;">
+                    <div style="font-size:11px;">Densidad (<span id="lblPfDensity">70%</span>):</div>
+                    <input type="range" id="pfCityDensity" min="10" max="100" value="70" style="width:100%;">
+                  </div>
+                  <div>
+                    <div style="font-size:11px;">Estilo:</div>
+                    <select id="pfStyleSelect" class="form-control" style="font-size:11px; padding:4px 8px;">
+                      <option value="industrial_terror">Industrial / Terror</option>
+                      <option value="modern_city">Ciudad Moderna</option>
+                      <option value="abandoned_town">Pueblo Abandonado</option>
+                      <option value="military_base">Instalación Militar</option>
+                      <option value="campus_hospital">Universidad &amp; Hospitales</option>
+                      <option value="forest_nature">Bosques &amp; Praderas</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display:flex; gap:8px; margin-top:8px; align-items:center; flex-wrap:wrap;">
+                  <input type="text" id="pfPromptText" class="form-control" placeholder="Ej: cinco escuelas, dos hospitales, tres comisarías y diez viviendas..." style="flex:1; min-width:220px; font-size:11.5px;" />
+                  <button type="button" class="btn btn-secondary" id="btnPfPreviewOnly" style="font-size:11.5px;">👁️ Previsualizar 3D</button>
+                  <button type="button" class="btn btn-primary" id="btnPfGenerateConfirm" style="font-weight:800; font-size:12px;">▶ GENERAR ENTORNO</button>
+                  <button type="button" class="btn btn-success" id="btnPfPlaceInLevel" style="background:#00ff88; color:#000; font-weight:900; font-size:12px; border:none; box-shadow:0 0 14px rgba(0,255,136,0.6); letter-spacing:0.5px;">📥 INCORPORAR AL NIVEL</button>
+                </div>
+              </div>
+
+              <!-- OPTIMIZACIÓN UNREAL -->
+              <div class="pf-panel">
+                <div class="pf-panel-title">
+                  <span>🖥️ OPTIMIZACIÓN UNREAL ENGINE</span>
+                  <select id="optProfileSelect" class="form-control" style="width:auto; font-size:10.5px; padding:2px 6px;">
+                    <option value="performance">Rendimiento</option>
+                    <option value="balanced" selected>Equilibrado</option>
+                    <option value="ultra">Calidad Máxima</option>
+                  </select>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:11.5px; margin-bottom:8px;">
+                  <label><input type="checkbox" id="optWorldPart" checked> World Partition</label>
+                  <label><input type="checkbox" id="optNanite" checked> Nanite (sin romper interactivos)</label>
+                  <label><input type="checkbox" id="optHlod" checked> HLOD + LODs</label>
+                  <label><input type="checkbox" id="optHism" checked> Auto Optimize + HISM/Culling</label>
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <button type="button" class="btn btn-primary" id="btnOptApplySafe" style="flex:1; padding:5px 8px; font-size:11px;">⚡ Optimizar (con Backup)</button>
+                  <button type="button" class="btn btn-secondary" id="btnOptRevert" style="padding:5px 8px; font-size:11px;">↩️ Revertir</button>
+                </div>
+              </div>
+
+              <!-- ESTADO ACTUAL -->
+              <div class="pf-panel">
+                <div class="pf-panel-title"><span>📡 ESTADO DEL DESTINO</span></div>
+                <div style="font-size:11.5px; line-height:1.5;">
+                  <div>Proyecto: <strong id="pfStatProject" style="color:#fff;">Sin seleccionar</strong></div>
+                  <div>Mapa: <strong id="pfStatMap" style="color:var(--ziro-secondary);">-</strong></div>
+                  <div>Estado: <strong id="pfStatStatus" style="color:var(--ziro-indicator);">Esperando comando</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 8: ZIRO CHARACTER FUSION
+             ========================================== -->
+        <section class="tab-pane" id="tab-fusion">
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>🧬 ZIRO CHARACTER FUSION — Fusión No Destructiva de Personajes y Packs Fab</h2>
+              <span class="badge">IK RIG + RETARGETER</span>
+            </div>
+            <p class="card-desc">Combina habilidades de personajes secundarios (B) hacia tu personaje principal (A) conservando su identidad, Skeletal Mesh y armas. Los proyectos fuente nunca se modifican.</p>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:14px; margin-top:12px;">
+              <!-- Personaje Principal A -->
+              <div class="pf-panel">
+                <div class="pf-panel-title"><span>1. PERSONAJE PRINCIPAL (A)</span></div>
+                <input type="text" id="fusionPrimaryName" class="form-control" value="Adrien Cross" placeholder="Ej: Adrien Cross" style="margin-bottom:8px;" />
+                <select id="fusionPrimarySkeleton" class="form-control" style="margin-bottom:8px; font-size:12px;">
+                  <option value="UE5_Manny">Esqueleto UE5 Manny / MetaHuman</option>
+                  <option value="UE4_Mannequin">Esqueleto UE4 Mannequin</option>
+                  <option value="Custom_Biped">Bípedo Personalizado</option>
+                </select>
+                <button type="button" class="btn btn-secondary" id="btnFusionScanActive" style="width:100%; font-size:11.5px;">🔍 Escanear Personajes en Proyecto Activo</button>
+                <div id="fusionPrimaryList" style="max-height:130px; overflow-y:auto; margin-top:8px; font-size:11.5px;"></div>
+              </div>
+
+              <!-- Fuentes Secundarias B -->
+              <div class="pf-panel">
+                <div class="pf-panel-title">
+                  <span>2. FUENTES SECUNDARIAS (B / FAB)</span>
+                  <button type="button" class="btn btn-secondary" id="btnFusionAddSourceProj" style="padding:2px 8px; font-size:10px;">📂 Proyecto Fuente</button>
+                </div>
+                <div id="fusionSourcesList" style="display:flex; flex-direction:column; gap:6px; font-size:11.5px;">
+                  <label class="fs-enemy-row"><input type="checkbox" class="fusion-src-cb" value="Pack_Locomotion_UE5" data-skel="UE5_Manny" checked> <span>Pack Parkour &amp; Escalada (UE5_Manny)</span></label>
+                  <label class="fs-enemy-row"><input type="checkbox" class="fusion-src-cb" value="Shooter_Weapon_System" data-skel="UE5_Manny" checked> <span>Pack Disparo &amp; Recarga Táctica</span></label>
+                  <label class="fs-enemy-row"><input type="checkbox" class="fusion-src-cb" value="Melee_Combat_Kit" data-skel="UE4_Mannequin"> <span>Melee Combat Kit (UE4_Mannequin → IK Retarget)</span></label>
+                </div>
+              </div>
+
+              <!-- Biblioteca de Habilidades -->
+              <div class="pf-panel">
+                <div class="pf-panel-title"><span>3. HABILIDADES A TRANSFERIR</span></div>
+                <div id="fusionAbilitiesGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:11.5px;"></div>
+                <label style="display:block; margin-top:10px; font-size:11.5px;"><input type="checkbox" id="chkFusionUseIK" checked> Usar IK Rig &amp; IK Retargeter automático cuando corresponda</label>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; align-items:center;">
+              <button type="button" class="btn btn-secondary" id="btnFusionAnalyze">🔬 Detectar Incompatibilidades y Conflictos</button>
+              <button type="button" class="btn btn-primary" id="btnFusionExecute">🚀 Fusionar en Proyecto Destino Activo</button>
+            </div>
+            <div id="fusionReportBox" style="margin-top:12px; padding:10px; border-radius:8px; background:rgba(0,0,0,0.45); border:1px solid var(--ziro-border); font-family:var(--font-mono); font-size:12px; display:none;"></div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 9: ZIRO FINISHER STUDIO (IMAGEN 3)
+             ========================================== -->
+        <section class="tab-pane" id="tab-finisher">
+          <!-- Header Toolbar igual a Imagen 3 -->
+          <div class="fs-header-bar">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:22px;">⚔️</span>
+              <div>
+                <h2 style="margin:0; font-size:17px; color:#fff; letter-spacing:1px;">ZIRO FINISHER STUDIO</h2>
+                <div style="font-size:11px; color:var(--color-text-muted);">Sistema de Ejecuciones y Finishers Avanzado para Unreal Engine 5.8</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+              <button type="button" class="btn btn-primary fs-subview-btn" data-fsview="config" style="font-size:11.5px;">⚙️ Configuración</button>
+              <button type="button" class="btn btn-secondary fs-subview-btn" data-fsview="library" style="font-size:11.5px;">📁 Biblioteca</button>
+              <button type="button" class="btn btn-secondary fs-subview-btn" data-fsview="retarget" style="font-size:11.5px;">🦴 Retargeting</button>
+              <button type="button" class="btn btn-secondary fs-subview-btn" data-fsview="preview" style="font-size:11.5px;">🎬 Preview 3D</button>
+              <button type="button" class="btn btn-secondary fs-subview-btn" data-fsview="logs" style="font-size:11.5px;">📄 Logs</button>
+              <button type="button" class="btn btn-secondary" id="btnFsPopout" style="font-size:11.5px;" title="Abrir Finisher Studio en nueva ventana aparte">🗗</button>
+            </div>
+          </div>
+
+          <!-- Grid Principal de 4 Columnas (idéntico a Imagen 3) -->
+          <div class="fs-main-grid" id="fsMainGrid">
+            <!-- Col 1: 1. Ejecutor + 2. Enemigos (Hasta 10) -->
+            <div class="fs-col-panel">
+              <div class="pf-panel-title"><span>1. PERSONAJE PRINCIPAL (EJECUTOR)</span></div>
+              <div style="display:flex; gap:8px; align-items:center; padding:6px; background:rgba(0,0,0,0.35); border-radius:8px;">
+                <div style="width:42px; height:42px; border-radius:8px; background:rgba(255,255,255,0.06); border:1px solid var(--ziro-primary); display:flex; align-items:center; justify-content:center; font-size:20px;">🧔</div>
+                <select id="fsExecutorSelect" class="form-control" style="flex:1; font-size:12px;">
+                  <option value="Adrien Cross">Adrien Cross</option>
+                  <option value="Player_Manny">UE5_Manny</option>
+                  <option value="Custom_Hero">Héroe del Proyecto</option>
+                </select>
+              </div>
+
+              <div class="pf-panel-title" style="margin-top:8px;">
+                <span>2. ENEMIGOS (OBJETIVOS)</span>
+                <span style="font-size:10px; color:var(--color-text-muted);">(Hasta 10)</span>
+              </div>
+              <div id="fsEnemiesList" style="display:flex; flex-direction:column; gap:5px; max-height:220px; overflow-y:auto;"></div>
+              <div style="display:flex; gap:4px; margin-top:4px;">
+                <input type="text" id="fsNewEnemyName" class="form-control" placeholder="Ej: Infectado Rápido" style="font-size:11px; padding:4px 6px;" />
+                <button type="button" class="btn btn-secondary" id="btnFsAddEnemy" style="padding:4px 8px; font-size:11px;">+ Agregar enemigo</button>
+              </div>
+              <button type="button" class="btn btn-secondary" id="btnFsEvalCompat" style="font-size:11px;">🩺 Verificar Compatibilidad Multi-Target</button>
+            </div>
+
+            <!-- Col 2: 3. Pack de Animaciones -->
+            <div class="fs-col-panel">
+              <div class="pf-panel-title"><span>3. PACK DE ANIMACIONES</span></div>
+              <div style="display:flex; gap:4px;">
+                <input type="text" id="fsPackPathInput" class="form-control" value="E:\Animaciones\Finishers\Finisher_Kills_Pack" style="font-size:10.5px; padding:5px;" />
+                <button type="button" class="btn btn-secondary" id="btnFsBrowsePack" style="padding:4px 8px; font-size:11px;">📂</button>
+              </div>
+              <div style="font-size:11px; color:var(--ziro-primary); font-weight:700;">Animaciones detectadas (<span id="fsAnimCount">10</span>)</div>
+              <div id="fsAnimationsList" style="display:flex; flex-direction:column; gap:4px; max-height:290px; overflow-y:auto;"></div>
+            </div>
+
+            <!-- Col 3: Previsualización 3D + Subvistas funcionales + Línea de tiempo + AI Animation Editor -->
+            <div class="fs-col-panel">
+              <div class="pf-panel-title">
+                <span>🎬 Previsualización (Finisher Aleatorio)</span>
+                <div style="display:flex; gap:4px; align-items:center;">
+                  <button type="button" class="btn btn-secondary" id="btnFsCompareToggle" style="padding:2px 7px; font-size:10px;">🌓 Original vs Modificada</button>
+                  <span id="fsClippingBadge" style="font-size:10px; color:var(--ziro-indicator);">✓ Sin Clipping</span>
+                </div>
+              </div>
+
+              <!-- Paneles secundarios (Biblioteca / Retargeting / Logs) cuando se seleccionan desde la barra superior -->
+              <div id="fsSubviewBanner" style="display:none; padding:8px; border-radius:8px; background:rgba(0,0,0,0.55); border:1px solid var(--ziro-secondary); font-size:11.5px; margin-bottom:4px;"></div>
+
+              <div class="fs-preview-stage">
+                <canvas id="fs3dCanvas" style="width:100%; height:290px; display:block;"></canvas>
+                <button type="button" id="btnFsPrevAnim" style="position:absolute; left:8px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.65); border:1px solid var(--ziro-border); color:#fff; border-radius:50%; width:30px; height:30px; cursor:pointer;">‹</button>
+                <button type="button" id="btnFsNextAnim" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.65); border:1px solid var(--ziro-border); color:#fff; border-radius:50%; width:30px; height:30px; cursor:pointer;">›</button>
+                <div id="fsStageCaption" style="position:absolute; top:8px; left:8px; font-size:11px; background:rgba(0,0,0,0.65); padding:4px 8px; border-radius:6px; border:1px solid var(--ziro-border);">
+                  Finisher_03 — Cámara Libre (Arrastrar / Rueda)
+                </div>
+              </div>
+
+              <!-- Controles de reproducción y cuadro a cuadro -->
+              <div style="display:flex; align-items:center; gap:6px; padding:4px 0;">
+                <button type="button" class="btn btn-secondary" id="btnFsPlayPause" style="padding:4px 9px; font-size:11px;">⏯️</button>
+                <button type="button" class="btn btn-secondary" id="btnFsStop" style="padding:4px 8px; font-size:11px;">⏹️</button>
+                <button type="button" class="btn btn-secondary" id="btnFsStepBack" style="padding:4px 8px; font-size:11px;">⏮ -1f</button>
+                <input type="range" id="fsTimelineScrubber" min="0" max="100" value="35" style="flex:1;" />
+                <button type="button" class="btn btn-secondary" id="btnFsStepFwd" style="padding:4px 8px; font-size:11px;">+1f ⏭</button>
+                <span id="fsTimeLabel" style="font-family:var(--font-mono); font-size:11px; min-width:72px;">0:01 / 0:03</span>
+              </div>
+
+              <!-- Tira F01 .. F05 -->
+              <div class="fs-thumbs-strip" id="fsThumbsStrip"></div>
+
+              <!-- ZIRO AI ANIMATION EDITOR (3D Skeletal Edit, NO video) -->
+              <div style="margin-top:6px; padding:8px; background:rgba(0,0,0,0.35); border:1px solid var(--ziro-border); border-radius:8px;">
+                <div style="font-size:11px; font-weight:800; color:var(--ziro-secondary); margin-bottom:4px;">🧠 ZIRO AI ANIMATION EDITOR (Edición 3D No Destructiva • Kimodo/ControlRig)</div>
+                <div style="display:flex; gap:6px;">
+                  <input type="text" id="fsAiInstructionInput" class="form-control" placeholder="Ej: Quiero que Adrien agarre la cabeza del zombie, la levante y retire el cuchillo antes de incorporarse..." style="flex:1; font-size:11px;" />
+                  <button type="button" class="btn btn-primary" id="btnFsAiPropose" style="font-size:11px; padding:5px 10px;">✨ Proponer Variante 3D</button>
+                </div>
+                <div id="fsAiVariantBox" style="margin-top:6px; font-size:11px; font-family:var(--font-mono); color:#dff7ea; display:none;"></div>
+              </div>
+            </div>
+
+            <!-- Col 4: Sistema de Ejecución (Random Finisher Tecla Ñ) + Opciones Avanzadas -->
+            <div class="fs-col-panel">
+              <div class="pf-panel-title"><span>⚙️ SISTEMA DE EJECUCIÓN</span></div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:6px; background:rgba(0,0,0,0.3); border-radius:6px; font-size:12px;">
+                <strong>🔀 Finisher Aleatorio</strong>
+                <label class="switch"><input type="checkbox" id="chkFsRandomEnabled" checked><span class="slider"></span></label>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px;">
+                <span>Tecla de ejecución:</span>
+                <div style="display:flex; gap:4px; align-items:center;">
+                  <input type="text" id="fsHotkeyInput" class="form-control" value="Ñ" maxlength="8" style="width:62px; text-align:center; font-weight:800; color:var(--ziro-primary);" />
+                  <button type="button" class="btn btn-secondary" id="btnFsCaptureKey" style="padding:3px 7px; font-size:10.5px;" title="Presiona cualquier tecla">✏️</button>
+                </div>
+              </div>
+              <div style="font-size:11.5px;">Modo de aleatoriedad:
+                <select id="fsRandomMode" class="form-control" style="margin-top:3px; font-size:11px; padding:4px;">
+                  <option value="shuffle_bag" selected>Sin repeticiones (Shuffle Bag)</option>
+                  <option value="normal_random">Aleatorio normal</option>
+                  <option value="weighted">Probabilidades personalizadas</option>
+                </select>
+              </div>
+              <label style="font-size:11.5px; display:flex; justify-content:space-between; align-items:center;">
+                <span><input type="checkbox" id="chkFsNoRepeat" checked> Evitar repetir consecutivo</span>
+              </label>
+              <label style="font-size:11.5px; display:flex; justify-content:space-between; align-items:center;">
+                <span><input type="checkbox" id="chkFsCompatOnly" checked> Usar solo animaciones compatibles</span>
+              </label>
+              <label style="font-size:11.5px; display:flex; justify-content:space-between; align-items:center;">
+                <span><input type="checkbox" id="chkFsCustomProb"> Probabilidad personalizada</span>
+              </label>
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px;">
+                <span>Límite de enemigos:</span>
+                <select id="fsEnemyLimitSelect" class="form-control" style="width:68px; font-size:11px; padding:3px 6px;">
+                  <option value="3">3</option>
+                  <option value="5">5</option>
+                  <option value="8">8</option>
+                  <option value="10" selected>10</option>
+                </select>
+              </div>
+              <button type="button" class="btn btn-secondary" id="btnFsTestRandomKey" style="font-size:11px;">⌨️ Simular Tecla (<span id="lblFsKeyDemo">Ñ</span>)</button>
+
+              <div class="pf-panel-title" style="margin-top:8px;"><span>🔧 OPCIONES AVANZADAS</span></div>
+              <label style="font-size:11.5px;"><input type="checkbox" id="chkFsOptRetarget" checked> Retargeting automático (IK Rig / IK Retargeter)</label>
+              <label style="font-size:11.5px;"><input type="checkbox" id="chkFsOptSync" checked> Sincronizar animaciones (atacante y objetivo)</label>
+              <label style="font-size:11.5px;"><input type="checkbox" id="chkFsOptBP" checked> Crear Montages y lógica en Blueprints</label>
+              <label style="font-size:11.5px;"><input type="checkbox" id="chkFsOptGAS" checked> Integrar al personaje principal (GAS / lógica)</label>
+            </div>
+          </div>
+
+          <!-- Footer Igual a Imagen 3 -->
+          <div class="fs-footer-bar">
+            <div style="font-size:12px;">Estado: <strong id="fsStatusText" style="color:var(--ziro-primary);">Listo para previsualizar e integrar</strong></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="button" class="btn btn-secondary" id="btnFsPreviewAction">👁️ Previsualizar</button>
+              <button type="button" class="btn btn-secondary" id="btnFsApplyVariant">✓ Aplicar Cambios Variante</button>
+              <button type="button" class="btn btn-primary" id="btnFsGenerateIntegrate" style="font-weight:800;">🎯 Generar e Integrar</button>
+              <button type="button" class="btn btn-secondary" id="btnFsExportPack">📁 Exportar Pack</button>
+              <button type="button" class="btn btn-secondary" id="btnFsSaveConfig">💾 Guardar Configuración</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 10: ZIRO SYSTEM SCANNER
+             ========================================== -->
+        <section class="tab-pane" id="tab-scanner">
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>🛰️ ZIRO SYSTEM SCANNER — Auditoría Multi-Disco (C:, D:, E:, F:...)</h2>
+              <span class="badge">REUTILIZAR SIN DUPLICAR</span>
+            </div>
+            <p class="card-desc">Inspecciona todos tus discos sin mover ni reinstalar herramientas existentes. Nuevas instalaciones y modelos preferirán <code>D:\ZIRO_AI</code> solo previa autorización.</p>
+            <div style="display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary" id="btnRunSystemScan">🔍 Escanear Todos los Discos Ahora</button>
+              <span id="scannerSummaryText" style="font-size:12px; color:var(--ziro-primary);">Listo para auditar el sistema.</span>
+            </div>
+            <div id="scannerRecommendationBox" style="margin-top:10px; padding:10px; border-radius:8px; background:rgba(0,0,0,0.4); border:1px solid var(--ziro-border); font-size:12px; display:none;"></div>
+            <div id="scannerResultsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:10px; margin-top:12px;"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;">
+              <div class="pf-panel">
+                <div class="pf-panel-title"><span>🧠 Modelos GGUF / LM Studio Detectados</span></div>
+                <div id="scannerGgufList" style="max-height:180px; overflow-y:auto; font-size:11.5px; font-family:var(--font-mono);"></div>
+              </div>
+              <div class="pf-panel">
+                <div class="pf-panel-title"><span>🔌 Plugins Unreal &amp; Entornos Virtuales (.venv)</span></div>
+                <div id="scannerPluginsList" style="max-height:180px; overflow-y:auto; font-size:11.5px; font-family:var(--font-mono);"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 12: EXE Y DISTRIBUCIÓN
+             ========================================== -->
+        <section class="tab-pane" id="tab-distribution">
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>📦 EXE y Distribución (Windows .EXE + Android .APK)</h2>
+              <span class="badge">EMPAQUETADO OFICIAL</span>
+            </div>
+            <p class="card-desc">Generación de instaladores NSIS/Portable con <strong>electron-builder</strong> y APK móvil Android para la mascota.</p>
+            <div class="build-info-box">
+              <div class="build-step"><span class="step-num">1</span><div><strong>Instalador Guiado Windows (.exe NSIS):</strong><p>Crea el instalador oficial <code>ZIRO PET DESTEKOP Setup 1.0.0.exe</code> en <code>dist/</code>.</p><code>npm run build:installer</code></div></div>
+              <div class="build-step"><span class="step-num">2</span><div><strong>Versión Portable (.exe):</strong><p>Ejecutable directo sin instalación.</p><code>npm run build:portable</code></div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 13: AJUSTES GLOBALES
+             ========================================== -->
+        <section class="tab-pane" id="tab-settings">
+          <div class="card neon-card">
+            <div class="card-header">
+              <h2>⚙️ Ajustes Generales de Plataforma, IA y Seguridad</h2>
+              <span class="badge">NO DESTRUCTIVO</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px; font-size:12.5px;">
+              <div>📁 <strong>Directorio preferido para nuevas instalaciones/modelos IA:</strong> <code>D:\ZIRO_AI</code></div>
+              <div>🔊 <strong>Motor de voz en tiempo real activo:</strong> <code>LiveKit (Preservado — sin duplicación)</code></div>
+              <div>🤖 <strong>Motor LLM local:</strong> <code>LM Studio (Modelos locales existentes sin duplicar)</code></div>
+              <div>🛡️ <strong>Protección de proyectos:</strong> Backups automáticos en <code>_ziro_backups</code>, prohibido sobrescribir sin confirmación y prohibido usar <code>ZiroHost</code> como destino automático.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 14. ZIRO GAMING VOICE CONTROL -->
+        <section class="tab-pane" id="tab-gaming">
+          <div class="card neon-card" style="margin-bottom:14px;">
+            <div class="card-header">
+              <div>
+                <h2>🎯 ZIRO GAMING VOICE CONTROL — Steam &amp; Counter-Strike 2</h2>
+                <div style="font-size:11.5px; color:var(--color-text-muted);">Control por voz, detección de procesos, visión OpenCV + OCR seguro (sin tocar memoria ni archivos protegidos).</div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <button type="button" class="btn btn-secondary" id="btnGamingRefresh" style="font-size:11px;">🔄 Actualizar Estado</button>
+                <button type="button" class="btn btn-danger" id="btnGamingCancel" style="font-size:11px;">⛔ Cancelar Acción</button>
+              </div>
+            </div>
+
+            <!-- Grid de Estados en Tiempo Real -->
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:10px; margin-top:10px;">
+              <div class="pf-panel" style="padding:10px;">
+                <div style="font-size:10.5px; color:var(--color-text-dim);">ESTADO DE STEAM</div>
+                <div id="gSteamStatus" style="font-size:14px; font-weight:800; color:var(--ziro-primary); margin-top:4px;">Verificando...</div>
+                <div id="gSteamPath" style="font-size:10px; color:var(--color-text-muted); margin-top:2px; word-break:break-all;">--</div>
+              </div>
+              <div class="pf-panel" style="padding:10px;">
+                <div style="font-size:10.5px; color:var(--color-text-dim);">ESTADO DE COUNTER-STRIKE 2</div>
+                <div id="gCs2Status" style="font-size:14px; font-weight:800; color:var(--ziro-primary); margin-top:4px;">Verificando...</div>
+                <div id="gCs2Detail" style="font-size:10px; color:var(--color-text-muted); margin-top:2px;">AppID 730</div>
+              </div>
+              <div class="pf-panel" style="padding:10px;">
+                <div style="font-size:10.5px; color:var(--color-text-dim);">RECONOCIMIENTO DE VOZ</div>
+                <div id="gVoiceStatus" style="font-size:14px; font-weight:800; color:#00ff88; margin-top:4px;">🎙️ ACTIVO (LiveKit)</div>
+                <div style="font-size:10px; color:var(--color-text-muted); margin-top:2px;">Listener único sin duplicación</div>
+              </div>
+              <div class="pf-panel" style="padding:10px;">
+                <div style="font-size:10.5px; color:var(--color-text-dim);">ZIRO GAMING MODE</div>
+                <div id="gGamingModeStatus" style="font-size:14px; font-weight:800; color:#ffaa44; margin-top:4px;">Inactivo</div>
+                <div style="font-size:10px; color:var(--color-text-muted); margin-top:2px;">Auto-activa con CS2</div>
+              </div>
+              <div class="pf-panel" style="padding:10px;">
+                <div style="font-size:10.5px; color:var(--color-text-dim);">ESTADO DE LA MASCOTA</div>
+                <div id="gPetSilentStatus" style="font-size:14px; font-weight:800; color:#00ff88; margin-top:4px;">🔊 ACTIVA</div>
+                <button type="button" class="btn btn-secondary" id="btnGamingToggleSilent" style="margin-top:6px; width:100%; font-size:10.5px;">🔇 Silenciar / Activar</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:14px;">
+            <!-- Panel Izquierdo: Acciones Directas y Configuración -->
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <div class="card neon-card">
+                <div class="card-header">
+                  <h3>🎮 Acciones Rápidas (Cola Segura + Visión OCR)</h3>
+                  <span id="gQueueStatus" class="badge">Libre</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                  <button type="button" class="btn btn-primary g-action-btn" data-gaction="open_steam" data-glabel="Abrir Steam">🚀 Abrir Steam</button>
+                  <button type="button" class="btn btn-secondary g-action-btn" data-gaction="close_steam" data-glabel="Cerrar Steam" data-gconfirm="1">🛑 Cerrar Steam</button>
+                  <button type="button" class="btn btn-primary g-action-btn" data-gaction="open_cs2" data-glabel="Iniciar Counter-Strike 2">🎯 Iniciar CS2</button>
+                  <button type="button" class="btn btn-secondary g-action-btn" data-gaction="close_cs2" data-glabel="Cerrar Counter-Strike 2" data-gconfirm="1">❌ Cerrar CS2</button>
+                  <button type="button" class="btn btn-primary g-action-btn" data-gaction="start_premier" data-glabel="Buscar Partida Premier" style="background:#00ff88; color:#000; font-weight:800;">🏆 Pon Partida Premier</button>
+                  <button type="button" class="btn btn-primary g-action-btn" data-gaction="accept_match" data-glabel="Aceptar Partida CS2" style="background:#00e5ff; color:#000; font-weight:800;">✅ Aceptar Partida</button>
+                </div>
+                <div id="gLastActionMsg" style="margin-top:10px; font-size:11.5px; color:var(--ziro-secondary); min-height:18px;">Listo para recibir comandos de voz o botones.</div>
+              </div>
+
+              <div class="card neon-card">
+                <div class="card-header">
+                  <h3>⚙️ Configuración de Comandos y Modo Gaming</h3>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+                  <label><input type="checkbox" id="gCfgAutoGaming" checked> Activar <strong>ZIRO GAMING MODE</strong> automáticamente al detectar CS2</label>
+                  <label><input type="checkbox" id="gCfgReduceChatter" checked> Reducir comentarios innecesarios de la mascota durante la partida</label>
+                  <label><input type="checkbox" id="gCfgNoPopups" checked> Evitar burbujas/ventanas emergentes largas sobre el juego</label>
+                  <label><input type="checkbox" id="gCfgConfirmClose"> Pedir confirmación antes de cerrar Steam o Counter-Strike 2</label>
+                  <div style="margin-top:6px; padding:8px; background:rgba(0,255,136,0.06); border:1px solid rgba(0,255,136,0.25); border-radius:8px; font-size:11px; line-height:1.5;">
+                    <div><strong>Comandos de voz compatibles:</strong></div>
+                    <div>• <code>"Ziro, abre Steam"</code> / <code>"Ziro, cierra Steam"</code></div>
+                    <div>• <code>"Ziro, abre Counter-Strike 2"</code> / <code>"Ziro, cierra Counter-Strike"</code></div>
+                    <div>• <code>"Ziro, pon una partida de Premier"</code></div>
+                    <div>• <code>"Ziro, acepta la partida"</code> / <code>"Ziro, acepta"</code></div>
+                    <div>• <code>"Desactívate, Ziro"</code> / <code>"Ziro, modo silencio"</code></div>
+                    <div>• <code>"Actívate, Ziro"</code> / <code>"Ziro, vuelve a hablar"</code></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel Derecho: Historial de Comandos -->
+            <div class="card neon-card">
+              <div class="card-header">
+                <h3>📜 Historial de Comandos Ejecutados</h3>
+                <span class="badge">LOG EN VIVO</span>
+              </div>
+              <div id="gHistoryList" style="display:flex; flex-direction:column; gap:6px; max-height:420px; overflow-y:auto; font-size:11.5px;">
+                <div style="color:var(--color-text-dim);">Aún no se han ejecutado comandos gaming en esta sesión.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Three.js IIFE Standalone Global for Interactive 3D Viewports -->
+  <script src="libs/three.iife.min.js"></script>
+  <script src="dashboard.js"></script>
+  <script src="dashboard_modules.js"></script>
+</body>
+</html>

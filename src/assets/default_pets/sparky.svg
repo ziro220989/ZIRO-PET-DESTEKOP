@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <filter id="glow-sparky" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient id="dog-body" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b2a22" />
+      <stop offset="100%" stop-color="#0c1410" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    @keyframes dogHop {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(-1deg); }
+    }
+    @keyframes wagFast {
+      0%, 100% { transform: rotate(-15deg); }
+      50% { transform: rotate(25deg); }
+    }
+    @keyframes radarBlink {
+      0%, 100% { opacity: 0.9; }
+      50% { opacity: 0.4; }
+    }
+    .dog-group { animation: dogHop 2.8s ease-in-out infinite; transform-origin: center bottom; }
+    .dog-tail { animation: wagFast 0.6s ease-in-out infinite; transform-origin: 145px 140px; }
+    .radar-pulse { animation: radarBlink 1.2s ease-in-out infinite; }
+  </style>
+
+  <g class="dog-group">
+    <!-- Wagging Tail with neon energy ring -->
+    <path class="dog-tail" d="M 145 140 Q 180 115 165 90 Q 155 85 150 95 Q 160 115 135 135 Z" fill="#1b2e25" stroke="#00ff66" stroke-width="2.5" filter="url(#glow-sparky)" />
+
+    <!-- Back Paws -->
+    <ellipse cx="65" cy="165" rx="15" ry="9" fill="#101c16" stroke="#00ff66" stroke-width="1.5" />
+    <ellipse cx="135" cy="165" rx="15" ry="9" fill="#101c16" stroke="#00ff66" stroke-width="1.5" />
+    <!-- Front Paws -->
+    <ellipse cx="85" cy="167" rx="14" ry="9" fill="#1c3026" stroke="#00ff66" stroke-width="1.8" />
+    <ellipse cx="115" cy="167" rx="14" ry="9" fill="#1c3026" stroke="#00ff66" stroke-width="1.8" />
+
+    <!-- Body -->
+    <path d="M 60 115 C 50 145 70 165 100 165 C 130 165 150 145 140 115 C 130 95 70 95 60 115 Z" fill="url(#dog-body)" stroke="#1a3528" stroke-width="2.5" />
+
+    <!-- Glowing Cyber Collar -->
+    <path d="M 72 118 Q 100 128 128 118" stroke="#00ff66" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#glow-sparky)" />
+    <circle cx="100" cy="125" r="5" fill="#00ffff" filter="url(#glow-sparky)" />
+
+    <!-- Left Shiba Ear with sensor -->
+    <polygon points="65,75 50,30 90,55" fill="url(#dog-body)" stroke="#00ff66" stroke-width="2" />
+    <line x1="58" y1="45" x2="48" y2="25" stroke="#00ff66" stroke-width="2" />
+    <circle class="radar-pulse" cx="48" cy="25" r="3" fill="#00ff66" filter="url(#glow-sparky)" />
+
+    <!-- Right Shiba Ear -->
+    <polygon points="135,75 150,30 110,55" fill="url(#dog-body)" stroke="#00ff66" stroke-width="2" />
+
+    <!-- Head -->
+    <ellipse cx="100" cy="82" rx="42" ry="36" fill="url(#dog-body)" stroke="#224234" stroke-width="2.5" />
+
+    <!-- Snout & Nose -->
+    <ellipse cx="100" cy="95" rx="20" ry="14" fill="#0b1611" stroke="#00ff66" stroke-width="1.5" />
+    <polygon points="96,90 104,90 100,96" fill="#00ff66" filter="url(#glow-sparky)" />
+    <!-- Happy Smile -->
+    <path d="M 94 98 Q 100 104 106 98" stroke="#00ff66" stroke-width="2" fill="none" stroke-linecap="round" />
+
+    <!-- Cyber Eyes (Large glowing puppy eyes) -->
+    <circle cx="82" cy="78" r="8" fill="#05120a" stroke="#00ff66" stroke-width="2" />
+    <circle cx="82" cy="78" r="5" fill="#00ff66" filter="url(#glow-sparky)" />
+    <circle cx="80" cy="76" r="2" fill="#ffffff" />
+
+    <circle cx="118" cy="78" r="8" fill="#05120a" stroke="#00ff66" stroke-width="2" />
+    <circle cx="118" cy="78" r="5" fill="#00ff66" filter="url(#glow-sparky)" />
+    <circle cx="116" cy="76" r="2" fill="#ffffff" />
+
+    <!-- Cheeks glow -->
+    <ellipse cx="70" cy="90" rx="5" ry="3" fill="#00ff66" opacity="0.5" filter="url(#glow-sparky)" />
+    <ellipse cx="130" cy="90" rx="5" ry="3" fill="#00ff66" opacity="0.5" filter="url(#glow-sparky)" />
+  </g>
+</svg>
